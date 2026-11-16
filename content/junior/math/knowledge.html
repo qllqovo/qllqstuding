@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>苏科版九上 · 重点题型全解（公式渲染）</title>
+    <!-- MathJax 配置与加载（支持 \(...\) 行内公式） -->
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #f2f5f9;
+            font-family: -apple-system, "PingFang SC", "Helvetica Neue", system-ui, sans-serif;
+            padding: 16px 12px 40px;
+            color: #1a2636;
+            line-height: 1.6;
+        }
+        .app-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .app-header h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #0b2b4a;
+            letter-spacing: 0.5px;
+        }
+        .app-header p {
+            color: #5e6f8d;
+            font-size: 14px;
+            border-top: 2px solid #d0dae8;
+            padding-top: 12px;
+            margin-top: 6px;
+        }
+        .chapter-card {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 4px 14px rgba(0, 20, 40, 0.06);
+            padding: 18px 16px 14px;
+            margin-bottom: 22px;
+            border-left: 6px solid #2a6f97;
+        }
+        .chapter-card:nth-child(1) { border-left-color: #2a6f97; }
+        .chapter-card:nth-child(2) { border-left-color: #1e7e5e; }
+        .chapter-card:nth-child(3) { border-left-color: #b13e3e; }
+        .chapter-card:nth-child(4) { border-left-color: #a5643c; }
+        .chapter-card:nth-child(5) { border-left-color: #5d4b8c; }
+
+        .chapter-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .chapter-title .badge {
+            background: #eef2f7;
+            border-radius: 30px;
+            padding: 0 14px;
+            font-size: 16px;
+            color: #1e3a5f;
+        }
+
+        .section-block {
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px dashed #dce3ef;
+        }
+        .section-block:first-of-type {
+            border-top: none;
+            padding-top: 0;
+        }
+        .section-name {
+            font-size: 17px;
+            font-weight: 600;
+            color: #1d3b5c;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .section-name .sub {
+            background: #e6edf6;
+            border-radius: 20px;
+            padding: 0 10px;
+            font-size: 13px;
+            font-weight: 400;
+            color: #2d4b6e;
+        }
+        .key-point {
+            background: #f8faff;
+            border-radius: 12px;
+            padding: 10px 14px;
+            margin: 6px 0 8px;
+            font-size: 15px;
+        }
+        .key-point strong {
+            color: #b13e3e;
+        }
+        .key-point .highlight {
+            background: #fff1e0;
+            padding: 1px 8px;
+            border-radius: 16px;
+            font-weight: 500;
+            color: #b3412a;
+        }
+        .question-types {
+            margin: 6px 0 0 0;
+            padding-left: 20px;
+            font-size: 14.5px;
+        }
+        .question-types li {
+            list-style-type: disc;
+            margin-bottom: 3px;
+            color: #1e3349;
+        }
+        .question-types li::marker {
+            color: #2a6f97;
+        }
+        .footer-note {
+            text-align: center;
+            font-size: 13px;
+            color: #68758e;
+            margin-top: 6px;
+            border-top: 1px solid #dce3ef;
+            padding-top: 18px;
+        }
+        @media (max-width: 400px) {
+            body { padding: 12px 10px 30px; }
+            .chapter-card { padding: 14px 12px; }
+            .chapter-title { font-size: 19px; }
+            .section-name { font-size: 16px; }
+            .key-point { font-size: 14px; }
+        }
+        /* 公式加载时避免闪动 */
+        .MathJax_SVG {
+            display: inline !important;
+        }
+    </style>
+  <link rel="stylesheet" href="../../assets/css/nordic.css">
+  <link rel="stylesheet" href="../../assets/css/content.css">
+</head>
+<body>
+<div class="content-topbar">
+  <button class="nav-back" type="button" onclick="Qllq.go('../../pages/subject-home.html?grade=junior&subject=math')">← 返回科目</button>
+  <span class="crumb">初中 · 数学</span>
+</div>
+<script src="../../assets/js/app.js"></script>
+<script>if(window.Qllq&&!Qllq.isAuthed()){Qllq.go('../../index.html');}</script>
+
+    <div class="app-header">
+        <h1>📚 苏科版 · 九上数学</h1>
+        <p>各章节重点 · 关键 · 常见题型（公式已渲染）</p>
+    </div>
+
+    <!-- 第1章 反比例函数 -->
+    <div class="chapter-card">
+        <div class="chapter-title"><span class="badge">第1章</span> 反比例函数</div>
+
+        <div class="section-block">
+            <div class="section-name">1.1 反比例函数的概念 <span class="sub">重点</span></div>
+            <div class="key-point"><strong>关键：</strong>三种等价形式 \( y=\frac{k}{x} \), \( xy=k \), \( y=kx^{-1} \)；\( k\neq0 \)，自变量 \( x\neq0 \)。</div>
+            <ul class="question-types">
+                <li><strong>题型：</strong>识别反比例函数；求解析式（待定系数法）；已知 \( x \) 求 \( y \) 或反之。</li>
+            </ul>
+        </div>
+
+        <div class="section-block">
+            <div class="section-name">1.2 图象与性质 <span class="sub">重点</span></div>
+            <div class="key-point"><strong>关键：</strong>双曲线，\( k>0 \) 在一、三象限，\( k<0 \) 在二、四象限；<span class="highlight">“在每一个象限内”</span>的增减性；关于原点对称；\( k \) 的几何意义（面积 \( |k| \)）。</div>
+            <ul class="question-types">
+                <li><strong>题型：</strong>判断象限；比较函数值大小（注意是否同象限）；求参数；利用几何意义求面积。</li>
+            </ul>
+        </div>
+
+        <div class="section-block">
+            <div class="section-name">1.3 用反比例函数解决问题 <span class="sub">应用</span></div>
+            <div class="key-point"><strong>关键：</strong>从实际问题中找到“乘积为定值”的关系，建立模型。</div>
+            <ul class="question-types">
+                <li><strong>题型：</strong>跨学科（压强、电压等）；工程/行程/经济利润；与一次函数综合。</li>
+            </ul>
+        </div>
+        <div class="section-block">
+            <div class="section-name">综合与实践 <span class="sub">探究</span></div>
+            <div class="key-point"><strong>关键：</strong>经历“问题—建模—求解—验证”全过程。</div>
+            <ul class="question-types"><li><strong>题型：</strong>开放性课题，数据分析与规律探索。</li></ul>
+        </div>
+    </div>
+
+    <!-- 第2章 一元二次方程 -->
+    <div class="chapter-card">
+        <div class="chapter-title"><span class="badge">第2章</span> 一元二次方程</div>
+
+        <div class="section-block">
+            <div class="section-name">2.1 概念 <span class="sub">重点</span></div>
+            <div class="key-point"><strong>关键：</strong>整式方程，一个未知数，最高次2；<span class="highlight">二次项系数 \( a\neq0 \)</span> 是隐含条件。</div>
+            <ul class="question-types">
+                <li><strong>题型：</strong>识别；根据概念求参数；化为一般形式并指出系数；已知解求参数。</li>
+            </ul>
+        </div>
+
+        <div class="section-block">
+            <div class="section-name">2.2 解法 <span class="sub">重点</span></div>
+            <div class="key-point"><strong>关键：</strong>灵活选择：<span class="highlight">直接开平方</span>（\( x^2=p \)）、<span class="highlight">配方法</span>（化1配方）、<span class="highlight">公式法</span>（\( \Delta \) 判别）、<span class="highlight">因式分解法</span>（便于分解时）。</div>
+            <ul class="question-types">
+                <li><strong>题型：</strong>选择最优解法；用指定方法解方程；一题多解；配方法求最值或证明。</li>
+            </ul>
+        </div>
+
+        <div class="section-block">
+            <div class="section-name">2.3 根的判别式 <span class="sub">重点</span></div>
+            <div class="key-point"><strong>关键：</strong>\( \Delta = b^2-4ac \) 判断根的情况（&gt;0 两个不等实根；=0 两个相等实根；&lt;0 无实根）。</div>
+            <ul class="question-types">
+                <li><strong>题型：</strong>不解方程判断根的情况；根据根的情况求参数范围；证明 \( \Delta \geq 0 \)；与二次函数综合。</li>
+            </ul>
+        </div>
+
+        <div class="section-block">
+            <div class="section-name">2.4 根与系数的关系（韦达定理） <span class="sub">重点</span></div>
+            <div class="key-point"><strong>关键：</strong>\( x_1+x_2=-\frac{b}{a} \), \( x_1x_2=\frac{c}{a} \)；<span class="highlight">前提：\( \Delta \geq 0 \)</span>。</div>
+            <ul class="question-types">
+                <li><strong>题型：</strong>已知一根求另一根及参数；求对称式的值（如 \( x_1^2+x_2^2 \)）；构造新方程；已知两根关系求参数。</li>
+            </ul>
+        </div>
+
+        <div class="section-block">
+            <div class="section-name">2.5 用方程解决问题 <span class="sub">应用</span></div>
+            <div class="key-point"><strong>关键：</strong>找准等量关系；<span class="highlight">检验方程解和实际意义</span>。</div>
+            <ul class="question-types">
+                <li><strong>题型：</strong>增长率/下降率；传播/分裂；单双循环；销售利润；面积/体积；数字问题；行程/工程。</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 第3章 圆 -->
+    <div class="chapter-card">
+        <div class="chapter-title"><span class="badge">第3章</span> 圆</div>
+
+        <div class="section-block">
+            <div class="section-name">3.1 圆的概念 <span class="sub">基础</span></div>
+            <div class="key-point"><strong>关键：</strong>弦、直径、弧、半圆、等圆、等弧（<span class="highlight">等弧必须同圆或等圆</span>）。</div>
+            <ul class="question-types"><li><strong>题型：</strong>概念辨析；利用半径相等构造等腰三角形结合勾股计算。</li></ul>
+        </div>
+
+        <div class="section-block">
+            <div class="section-name">3.2 确定圆的条件 <span class="sub">重点</span></div>
+            <div class="key-point"><strong>关键：</strong>不在同一直线上的三点确定一个圆；外心（三边垂直平分线交点）到三个顶点距离相等。</div>
+            <ul class="question-types">
+                <li><strong>题型：</strong>确定圆心；外心位置判断（锐角在内，直角在斜边中点，钝角在外）；利用外心求角度。</li>
+            </ul>
+        </div>
+
+        <div class="section-block">
+            <div class="section-name">3.3 圆的对称性 <span class="sub">重点</span></div>
+            <div class="key-point"><strong>关键：</strong>垂径定理及推论；圆心角、弧、弦、弦心距的相等关系；辅助线：<span class="highlight">连半径、作弦心距</span>，构造直角三角形（\( r^2=d^2+(\frac{弦}{2})^2 \)）。</div>
+            <ul class="question-types">
+                <li><strong>题型：</strong>求弦长/半径；证明弧或弦相等；最值问题（点到圆上距离）。</li>
+            </ul>
+        </div>
+
+        <div class="section-block">
+            <div class="section-name">3.4 圆周角 <span class="sub">重点</span></div>
+            <div class="key-point"><strong>关键：</strong>圆周角定理及推论：<span class="highlight">直径所对圆周角=90°</span>，同弧所对圆周角相等。</div>
+            <ul class="question-types">
+                <li><strong>题型：</strong>求角度；证明垂直/角相等；与相似三角形结合（同弧等角）。</li>
+            </ul>
+        </div>
+
+        <div class="section-block">
+            <div class="section-name">3.5 点、直线与圆的位置关系 <span class="sub">重点</span></div>
+            <div class="key-point"><strong>关键：</strong>比较 \( d \) 与 \( r \)；<span class="highlight">切线的判定</span>（有交点连半径证垂直；无交点作垂直证半径）；切线长定理（相等、平分夹角）。</div>
+            <ul class="question-types">
+                <li><strong>题型：</strong>位置判断；切线证明（高频）；利用切线求长度/角度；切线长定理应用。</li>
+            </ul>
+        </div>
+
+        <div class="section-block">
+            <div class="section-name">3.6 正多边形与圆 <span class="sub">基础</span></div>
+            <div class="key-point"><strong>关键：</strong>中心角 \( \frac{360°}{n} \)；将正多边形转化为<span class="highlight">等腰三角形或直角三角形</span>（边心距、半径、半边长）。</div>
+            <ul class="question-types"><li><strong>题型：</strong>求中心角/边长/边心距；作图或镶嵌。</li></ul>
+        </div>
+
+        <div class="section-block">
+            <div class="section-name">3.7 弧长、扇形及圆锥侧面积 <span class="sub">重点</span></div>
+            <div class="key-point"><strong>关键：</strong>公式 \( l=\frac{n\pi r}{180} \), \( S=\frac{n\pi r^2}{360}=\frac12 lr \)；圆锥：<span class="highlight">扇形弧长=底面周长</span>，扇形半径=母线。</div>
+            <ul class="question-types">
+                <li><strong>题型：</strong>求弧长/面积；求圆锥底面半径/母线；阴影面积（割补法、等积变换）；最短路径（展开）。</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 第4章 数据的集中趋势和离散程度 -->
+    <div class="chapter-card">
+        <div class="chapter-title"><span class="badge">第4章</span> 数据集中趋势 &amp; 离散程度</div>
+
+        <div class="section-block">
+            <div class="section-name">4.1 平均数 <span class="sub">基础</span></div>
+            <div class="key-point"><strong>关键：</strong>算术平均数和<span class="highlight">加权平均数</span>，“权”的意义（权越大影响越大）。</div>
+            <ul class="question-types">
+                <li><strong>题型：</strong>直接计算；结合图表（条形、扇形、频数分布）计算；决策应用（如评判名次）；已知平均数反求数据。</li>
+            </ul>
+        </div>
+
+        <div class="section-block">
+            <div class="section-name">4.2 中位数与众数 <span class="sub">基础</span></div>
+            <div class="key-point"><strong>关键：</strong>中位数<span class="highlight">先排序</span>，奇数取中间，偶数取中间两数平均；众数可能不唯一。</div>
+            <ul class="question-types">
+                <li><strong>题型：</strong>求中位数/众数；与平均数、方差综合；实际情境选择（用哪个代表平均水平更合理）。</li>
+            </ul>
+        </div>
+
+        <div class="section-block">
+            <div class="section-name">4.3 四分位数和箱线图 <span class="sub">新考点</span></div>
+            <div class="key-point"><strong>关键：</strong>\( Q_1 \)（25%）、\( Q_3 \)（75%）— <span class="highlight">中位数分割法</span>（先找 \( Q_2 \)，再分别找左右中位数）；箱线图直观展示分布。</div>
+            <ul class="question-types">
+                <li><strong>题型：</strong>计算四分位数；绘制或补全箱线图；读图比较两组数据分布（集中程度、中位数、波动）。</li>
+            </ul>
+        </div>
+
+        <div class="section-block">
+            <div class="section-name">4.4 方差 <span class="sub">重点</span></div>
+            <div class="key-point"><strong>关键：</strong>方差公式 \( S^2=\frac{1}{n}\sum (x_i-\bar{x})^2 \)，方差越大波动越大。<span class="highlight">数据同加减方差不变，同乘k方差乘k²</span>。</div>
+            <ul class="question-types">
+                <li><strong>题型：</strong>计算方差/标准差；稳定性判断（比较方差）；方差变形应用。</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 第5章 等可能条件下的概率 -->
+    <div class="chapter-card">
+        <div class="chapter-title"><span class="badge">第5章</span> 等可能条件下的概率</div>
+
+        <div class="section-block">
+            <div class="section-name">5.1 等可能性 <span class="sub">基础</span></div>
+            <div class="key-point"><strong>关键：</strong>结果有限且<span class="highlight">可能性相等</span>。</div>
+            <ul class="question-types"><li><strong>题型：</strong>判断是否等可能；列举所有可能结果并说明。</li></ul>
+        </div>
+
+        <div class="section-block">
+            <div class="section-name">5.2 概率计算 <span class="sub">重点</span></div>
+            <div class="key-point"><strong>关键：</strong>\( P(A)=\frac{m}{n} \)；<span class="highlight">列表法</span>（两步）和<span class="highlight">树状图法</span>（两步以上），注意“放回”与“不放回”的区别。</div>
+            <ul class="question-types">
+                <li><strong>题型：</strong>一步概率；两步概率（放回/不放回，必考列表或树状图）；几何概型（面积型）。</li>
+            </ul>
+        </div>
+
+        <div class="section-block">
+            <div class="section-name">5.3 抽签公平性 <span class="sub">应用</span></div>
+            <div class="key-point"><strong>关键：</strong>证明抽签顺序不影响概率（先抽后抽概率相等）。</div>
+            <ul class="question-types">
+                <li><strong>题型：</strong>计算抽签概率；判断规则公平性并说明理由。</li>
+            </ul>
+        </div>
+
+        <div class="section-block">
+            <div class="section-name">5.4 用频率估计概率 <span class="sub">应用</span></div>
+            <div class="key-point"><strong>关键：</strong>利用频率稳定值估计概率，或根据比例估计总数（如捉放法）。</div>
+            <ul class="question-types">
+                <li><strong>题型：</strong>估计总数（经典“标记重捕”）；通过大量实验估计概率。</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer-note">📌 系统梳理 · 公式已渲染 · 题型全覆盖 — 祝复习高效！</div>
+</body>
+</html>
