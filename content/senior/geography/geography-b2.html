@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>高一必修二地理背诵闯关要点</title>
+    <style>
+        /* 基础重置与全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f0f4f8;
+            color: #2d3748;
+            padding: 16px 16px 40px;
+            line-height: 1.6;
+        }
+        
+        /* 模拟手机容器 */
+        .app-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 头部 */
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding: 20px 0;
+        }
+        .header h1 {
+            font-size: 22px;
+            color: #1a365d;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+        .header p {
+            font-size: 14px;
+            color: #718096;
+        }
+
+        /* 折叠卡片设计 */
+        details {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            margin-bottom: 16px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        /* 标题栏 */
+        summary {
+            padding: 16px 18px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            color: #2d3748;
+            background: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            list-style: none;
+            border-left: 4px solid #4299e1; /* 默认蓝色 */
+            transition: background 0.2s;
+        }
+        summary:active {
+            background: #f7fafc;
+        }
+        /* 隐藏默认的三角箭头 */
+        summary::-webkit-details-marker { display: none; }
+        summary::after {
+            content: "➕";
+            font-size: 16px;
+            color: #a0aec0;
+            transition: transform 0.2s;
+        }
+        details[open] summary::after {
+            content: "➖";
+        }
+
+        /* 内容区域 */
+        .content {
+            padding: 0 18px 18px;
+            font-size: 15px;
+            color: #4a5568;
+        }
+        .content p {
+            margin: 10px 0;
+            text-align: justify;
+        }
+        .content strong {
+            color: #2d3748;
+        }
+        
+        /* 列表样式优化 */
+        .content ul {
+            padding-left: 18px;
+            margin: 8px 0;
+        }
+        .content ul li {
+            margin-bottom: 6px;
+            list-style-type: "· ";
+            padding-left: 6px;
+        }
+        
+        /* 标签小标记 */
+        .tag {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        .tag-blue { background: #4299e1; }
+        .tag-green { background: #48bb78; }
+        .tag-orange { background: #ed8936; }
+        .tag-purple { background: #9f7aea; }
+
+        /* 卡片颜色分类 */
+        /* 人口与城市类 - 蓝色边框 */
+        details.category-population summary { border-left-color: #4299e1; }
+        /* 经济产业类 - 绿色边框 */
+        details.category-economy summary { border-left-color: #48bb78; }
+        /* 交通区域类 - 橙色边框 */
+        details.category-transport summary { border-left-color: #ed8936; }
+        /* 环境战略类 - 紫色边框 */
+        details.category-environment summary { border-left-color: #9f7aea; }
+        
+        /* 小节标题 */
+        .sub-title {
+            font-weight: 600;
+            color: #2b6cb0;
+            margin-top: 12px;
+            font-size: 14px;
+            border-bottom: 1px dashed #e2e8f0;
+            padding-bottom: 4px;
+        }
+    </style>
+  <link rel="stylesheet" href="../../assets/css/nordic.css">
+  <link rel="stylesheet" href="../../assets/css/content.css">
+</head>
+<body>
+<div class="content-topbar">
+  <button class="nav-back" type="button" onclick="Qllq.go('../../pages/subject-home.html?grade=senior&subject=geography')">← 返回科目</button>
+  <span class="crumb">高中 · 地理</span>
+</div>
+<script src="../../assets/js/app.js"></script>
+<script>if(window.Qllq&&!Qllq.isAuthed()){Qllq.go('../../index.html');}</script>
+
+
+<div class="app-container">
+    <div class="header">
+        <h1>🌍 地理背诵闯关要点</h1>
+        <p>高一必修二 · 考前速记手册</p>
+    </div>
+
+    <!-- ================= 第一至七关：人口与城市 ================= -->
+    
+    <details class="category-population" open>
+        <summary>第一关：人口分布</summary>
+        <div class="content">
+            <p><strong>世界分布规律：</strong>总体不平衡，集中在北半球中低纬度近海平原。</p>
+            <p><strong>四大人口稠密区：</strong>东亚、南亚、西欧、北美东北部。</p>
+            <p><strong>影响因素：</strong>自然因素（地形、气候、水源、土壤）；社会经济因素（经济水平、交通、开发历史、政策）。</p>
+        </div>
+    </details>
+
+    <details class="category-population">
+        <summary>第二关：人口迁移</summary>
+        <div class="content">
+            <p><strong>判断标准：</strong>①跨越行政界线；②居住地变更；③长期/永久。</p>
+            <p><strong>影响：</strong>迁入地（缓解劳力不足、增加负担、促进文化交融）；迁出地（缓解人地压力、人才流失、增加收入）。</p>
+            <p><strong>影响因素：</strong>自然灾害、经济就业（主要）、战争政策、教育家庭。</p>
+            <div class="sub-title">流向与原因</div>
+            <p><strong>国际迁移：</strong>流向（发展中国家→发达国家/新兴经济体）；原因为经济差距。</p>
+            <p><strong>国内迁移：</strong>流向（农村→城市、中西部→东部沿海）；原因为城镇化与区域差异。</p>
+        </div>
+    </details>
+
+    <details class="category-population">
+        <summary>第三关：资源环境承载力与人口合理容量</summary>
+        <div class="content">
+            <p><strong>容量大小对比：</strong>资源环境承载力（极限值/最大） > 人口合理容量（最适宜值/最佳）。</p>
+            <p><strong>“短板效应”内容：</strong>环境承载力由最稀缺的“短板”资源决定。</p>
+            <p><strong>影响因素：</strong>资源（首要）、科技水平、消费水平、对外开放程度。</p>
+        </div>
+    </details>
+
+    <details class="category-population">
+        <summary>第四关：人口统计图判读</summary>
+        <div class="content">
+            <p><strong>判读方法：</strong>读坐标（横纵含义）、看趋势（折线升降）、比比重（饼图结构）、辨形状（人口金字塔看年龄性别）。</p>
+        </div>
+    </details>
+
+    <details class="category-population">
+        <summary>第五关：城镇内部功能区</summary>
+        <div class="content">
+            <p><strong>三大功能区：</strong>商业区（占地小、交通优）、住宅区（最普遍、分等级）、工业区（占地广、向外围移动）。</p>
+            <p><strong>影响地租水平因素：</strong>距离市中心远近；交通通达度。</p>
+            <p><strong>合理布局原则：</strong>商业区在市中心；工业区在河流下游、盛行风下风向；住宅区在中间，高级住宅区选择环境优美处。</p>
+        </div>
+    </details>
+
+    <details class="category-population">
+        <summary>第六关：城镇化</summary>
+        <div class="content">
+            <p><strong>标志及衡量指标：</strong>城市人口比重上升（主要）、用地规模扩大、劳动力由第一产业转向二、三产业。</p>
+            <p><strong>三阶段：</strong>初期（慢）、加速（快）、成熟（慢/逆城市化）。</p>
+            <p><strong>四进程：</strong>起步 → 加速 → 成熟 →（发达国家逆城市化/再城市化）。</p>
+            <p><strong>地区差异：</strong>发达国家（起步早、水平高、速度慢）；发展中国家（起步晚、水平低、速度快）。</p>
+            <p><strong>问题及对策：</strong>问题（环境、交通、住房、就业）；对策（建卫星城、合理规划、增加绿化、治理污染）。</p>
+        </div>
+    </details>
+
+    <details class="category-population">
+        <summary>第七关：地域文化与城乡景观</summary>
+        <div class="content">
+            <p><strong>地域文化分类：</strong>物质文化（建筑、服饰）；非物质文化（风俗、信仰）。</p>
+            <p><strong>民居与环境关系：</strong>适应气候（窑洞、竹楼）、就地取材（石头房、木屋）。</p>
+            <p><strong>中西方建筑差异：</strong>中式（注重天人合一、合院式、群体布局）；西式（强调个体独立、哥特式、向高空发展）。</p>
+        </div>
+    </details>
+
+    <!-- ================= 第八至十四关：产业与环境 ================= -->
+    
+    <details class="category-economy">
+        <summary>第八关：农业生产</summary>
+        <div class="content">
+            <p><strong>生产特点：</strong>地域性、季节性、周期性。</p>
+            <p><strong>区位含义及因素：</strong>自然（气候、地形、土壤、水源）＋社会经济（市场、交通、政策、科技、劳动力）。</p>
+            <p><strong>主导与限制因素：</strong>干旱区（水源）、高纬度（热量）、平原（地形）。</p>
+            <p><strong>区位选择：</strong>大范围看气候地形；小范围（城郊选花卉/乳牛/蔬菜/果园）。</p>
+            <p><strong>典型作物习性：</strong>水稻（喜温湿）、小麦（耐旱耐寒）、茶树（喜酸性土）、柑橘（喜温暖湿润）、苹果（喜光耐寒）。</p>
+        </div>
+    </details>
+
+    <details class="category-economy">
+        <summary>第九关：工业区位因素</summary>
+        <div class="content">
+            <p><strong>五种导向型工业及选址：</strong></p>
+            <ul>
+                <li><strong>原料导向型</strong>（甘蔗/水产品）→ 近原料地。</li>
+                <li><strong>市场导向型</strong>（啤酒/家具）→ 近消费市场。</li>
+                <li><strong>动力导向型</strong>（电解铝/化工）→ 近能源地。</li>
+                <li><strong>劳动力导向型</strong>（服装/电子装配）→ 近廉价劳动力。</li>
+                <li><strong>技术导向型</strong>（集成电路/生物医药）→ 近高校与科研机构。</li>
+            </ul>
+            <p><strong>区位因素变化：</strong>原料、劳动力影响减弱；市场、交通、信息、环境要求增强。</p>
+        </div>
+    </details>
+
+    <details class="category-economy">
+        <summary>第十关：服务业区位</summary>
+        <div class="content">
+            <p><strong>服务业分类：</strong>商业性服务业（营利、批发/零售/金融）；非商业性（非营利、教育/公共医疗）。</p>
+            <p><strong>区位因素：</strong>市场（人口）、交通、劳动力、政策、集聚效应。</p>
+            <p><strong>变化趋势：</strong>信息网络增强，餐饮零售线上线下融合，大型商业向郊区交通便利处迁移。</p>
+        </div>
+    </details>
+
+    <details class="category-transport">
+        <summary>第十一关：交通运输布局</summary>
+        <div class="content">
+            <p><strong>布局一般原则：</strong>因地制宜、适度超前、区域均衡、适应需求。</p>
+            <p><strong>区位因素：</strong>自然（地形/地质/水文）、社会（经济需求）、科技（克服自然障碍）。</p>
+            <p><strong>交通方式比较：</strong>水运（运量大、运费低、慢）；铁路（运量大、快）；公路（灵活、短途）；航空（快、运量小）；管道（连续性强）。</p>
+            <p><strong>建设意义：</strong>促进资源开发、带动沿线经济、完善交通网、加强区域联系、维护国防安全。</p>
+        </div>
+    </details>
+
+    <details class="category-transport">
+        <summary>第十二关：交通运输对区域发展的影响</summary>
+        <div class="content">
+            <p><strong>经济影响：</strong>带动产业发展，促进经济带形成，缩小区域差距。</p>
+            <p><strong>对聚落影响：</strong>促进城市沿交通线发展，改变聚落形态（星状、带状），交通衰败导致聚落萎缩。</p>
+            <p><strong>“一带一路”：</strong>内涵（丝绸之路经济带、21世纪海上丝绸之路）；优先领域（基建、能源、贸易）；意义（促区域合作、建命运共同体）。</p>
+        </div>
+    </details>
+
+    <details class="category-environment">
+        <summary>第十三关：环境问题与可持续发展</summary>
+        <div class="content">
+            <p><strong>环境问题产生原因：</strong>人口压力大、资源不合理利用、片面追求经济增长。</p>
+            <p><strong>主要表现：</strong>环境污染（水、大气、固废）；生态破坏（森林锐减、水土流失、荒漠化）。</p>
+            <p><strong>区域差异：</strong>城乡（城市以污染为主，农村以生态破坏为主）；国家（发达国家碳排放/污染转移，发展中国家生态破坏）。</p>
+            <p><strong>可持续发展内涵：</strong>经济、社会、生态的协调发展。</p>
+            <p><strong>原则：</strong>公平性、持续性、共同性。</p>
+            <p><strong>实施路径：</strong>绿色生产、绿色消费、公众参与（政府/企业/个人三主体）。</p>
+        </div>
+    </details>
+
+    <details class="category-environment">
+        <summary>第十四关：区域战略与海洋权益</summary>
+        <div class="content">
+            <p><strong>循环经济：</strong>资源循环利用，特点是低消耗、低排放、高效率。</p>
+            <p><strong>主体功能区分类：</strong>优化、重点、限制、禁止开发区域。</p>
+            <p><strong>长江经济带：</strong>区位优势（黄金水道）；战略（生态优先、绿色发展、共抓大保护）；成效（经济发展快、产业升级）。</p>
+            <p><strong>维护海洋权益：</strong>维护领海主权，合理开发海洋资源，保障海洋通道安全，增强海洋意识。</p>
+        </div>
+    </details>
+
+</div>
+
+</body>
+</html>
