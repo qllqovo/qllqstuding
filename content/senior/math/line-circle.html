@@ -1,424 +1,472 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-    <title>直线与圆的方程 - 教学交互系统</title>
-    <!-- 公式渲染引擎 KaTeX -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
-    <style>
-        :root {
-            --primary: #4f46e5; --primary-light: #818cf8;
-            --bg: #f8fafc; --card: #ffffff; --text: #1e293b;
-            --radius: 12px; --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            --canvas-bg: #f1f5f9;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; display: flex; flex-direction: column;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>直线与圆的方程 · 交互演示</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='8' fill='%235a7a6b'/%3E%3C/svg%3E">
+  <script src="../../../assets/js/tex.js"></script>
+  <style>
+    :root {
+      --line: #5a7a6b;       /* 苔绿：直线 */
+      --circle: #7ba0b8;     /* 灰蓝：圆 */
+      --circle2: #a89279;    /* 木色：圆2 */
+      --warn: #c9a88c;
+      --grid: rgba(168, 146, 121, 0.18);
+      --ink: #3d3d3d;
+      --muted: #a89279;
+      --paper: #f5f0eb;
+      --soft: rgba(255, 255, 255, 0.6);
+      --border: rgba(201, 168, 140, 0.3);
+      --border-strong: rgba(201, 168, 140, 0.8);
+      --slow: 700ms ease-in-out;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      font-weight: 300;
+      line-height: 1.8;
+    }
 
-        /* 顶部导航 */
-        .header {
-            background: var(--card); padding: 12px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; z-index: 10;
-        }
-        .header h1 { font-size: 18px; font-weight: 600; color: var(--primary); }
-        .mode-switch {
-            display: flex; gap: 8px; background: #f1f5f9; padding: 4px; border-radius: 8px;
-        }
-        .mode-btn {
-            padding: 6px 12px; border: none; background: transparent; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; color: #64748b;
-        }
-        .mode-btn.active { background: white; color: var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .mode-btn:hover:not(.active) { color: var(--text); }
+    .page-head {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 32px 40px 0;
+    }
+    .page-head h1 { font-size: 26px; font-weight: 300; }
+    .page-head p { font-size: 13px; color: var(--muted); margin-top: 4px; }
 
-        /* 主体布局（响应式核心） */
-        .app-container {
-            display: flex; flex: 1; overflow: hidden; flex-direction: row;
-        }
+    .seg {
+      display: inline-flex;
+      margin-top: 24px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .seg button {
+      padding: 10px 28px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background var(--slow), color var(--slow);
+    }
+    .seg button + button { border-left: 1px solid var(--border); }
+    .seg button.active { background: var(--ink); color: var(--paper); }
 
-        /* 左侧图形区 */
-        .canvas-wrapper {
-            flex: 1; background: var(--canvas-bg); position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center;
-        }
-        #graphCanvas {
-            width: 100%; height: 100%; display: block; cursor: grab; touch-action: none;
-        }
+    .layout {
+      max-width: 1040px;
+      margin: 32px auto 64px;
+      padding: 0 40px;
+      display: grid;
+      grid-template-columns: 5fr 4fr;
+      gap: 40px;
+      align-items: start;
+    }
 
-        /* 右侧控制与反馈区 */
-        .panel-wrapper {
-            width: 380px; background: var(--card); border-left: 1px solid #e2e8f0;
-            display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0;
-        }
-        
-        /* 控制区域 */
-        .controls-section { padding: 16px 20px; border-bottom: 1px solid #f1f5f9; flex-shrink: 0; }
-        .param-group { display: none; flex-direction: column; gap: 12px; }
-        .param-group.active { display: flex; }
-        .input-row { display: flex; align-items: center; gap: 12px; justify-content: space-between; }
-        .input-row label { font-size: 14px; font-weight: 500; min-width: 30px; }
-        input[type="range"] { flex: 1; accent-color: var(--primary); height: 4px; cursor: pointer; }
-        .val-box { background: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-size: 13px; min-width: 40px; text-align: center; font-weight: 600; }
+    .canvas-card {
+      background: var(--soft);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 24px;
+    }
+    .canvas-card h3 {
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    #graph {
+      width: 100%;
+      height: 420px;
+      display: block;
+      touch-action: none;
+    }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 16px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .legend span { display: inline-flex; align-items: center; gap: 8px; }
+    .swatch { width: 18px; height: 2px; display: inline-block; }
 
-        /* 反馈区域 */
-        .feedback-section { padding: 16px 20px; flex: 1; overflow-y: auto; }
-        .card-box { background: #f8fafc; padding: 12px 16px; border-radius: var(--radius); margin-bottom: 16px; border: 1px solid #e2e8f0; }
-        .card-box h3 { font-size: 14px; font-weight: 600; color: #475569; margin-bottom: 6px; }
-        .eq-display { font-size: 16px; padding: 8px 0; min-height: 24px; color: var(--text); }
-        
-        .step-box { margin-top: 10px; padding: 10px; background: white; border-radius: 8px; border-left: 4px solid var(--primary-light); font-size: 14px; line-height: 1.6; }
-        .step-box .sub-step { color: #475569; padding-left: 12px; font-size: 13px; }
-        .tag-result { display: inline-block; padding: 2px 10px; border-radius: 20px; font-weight: 600; font-size: 14px; margin-top: 4px; }
-        .tag-intersect { background: #dcfce7; color: #15803d; }
-        .tag-tangent { background: #fef9c3; color: #854d0e; }
-        .tag-separate { background: #fee2e2; color: #b91c1c; }
+    .panel { display: flex; flex-direction: column; gap: 24px; }
+    .block {
+      background: var(--soft);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 24px;
+    }
+    .block h3 {
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .param { display: none; flex-direction: column; gap: 14px; }
+    .param.active { display: flex; }
+    .row {
+      display: grid;
+      grid-template-columns: 64px 1fr 48px;
+      align-items: center;
+      gap: 12px;
+    }
+    .row label { font-size: 13px; color: var(--ink); }
+    .row output {
+      font-size: 13px;
+      text-align: right;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 1px;
+      background: var(--border-strong);
+      outline: none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--ink);
+      border: none;
+      cursor: pointer;
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--ink);
+      border: none;
+      cursor: pointer;
+    }
+    .subhead {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin: 6px 0 -4px;
+    }
 
-        /* ===== 响应式断点 ===== */
-        @media screen and (max-width: 1024px) {
-            .panel-wrapper { width: 320px; }
-        }
+    .eq { font-size: 15px; margin: 8px 0; overflow-x: auto; overflow-y: hidden; }
+    .verdict {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 4px 16px;
+      border: 1px solid var(--border-strong);
+      border-radius: 2px;
+      font-size: 14px;
+      color: var(--ink);
+    }
+    .steps { font-size: 13px; display: flex; flex-direction: column; gap: 10px; }
+    .steps .step { color: var(--ink); }
+    .steps .num {
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      margin-right: 8px;
+    }
+    .note { font-size: 12px; color: var(--muted); margin-top: 12px; }
 
-        @media screen and (max-width: 768px) {
-            body { overflow-y: auto; height: auto; }
-            .app-container { flex-direction: column; height: calc(100vh - 60px); }
-            .canvas-wrapper { height: 45vh; flex: none; }
-            .panel-wrapper { width: 100%; height: 55vh; border-left: none; border-top: 1px solid #e2e8f0; }
-        }
-
-        @media screen and (max-width: 480px) {
-            .header h1 { font-size: 15px; }
-            .mode-btn { padding: 4px 10px; font-size: 12px; }
-            .controls-section, .feedback-section { padding: 12px; }
-            .card-box { padding: 10px; }
-        }
-    </style>
-  <link rel="stylesheet" href="../../../assets/css/nordic.css">
-  <link rel="stylesheet" href="../../../assets/css/content.css">
+    @media (max-width: 860px) {
+      .page-head { padding: 24px 24px 0; }
+      .layout { grid-template-columns: 1fr; padding: 0 24px; gap: 24px; }
+      #graph { height: 320px; }
+      .seg button { padding: 10px 20px; }
+    }
+    @media (max-width: 420px) {
+      .page-head, .layout { padding-left: 16px; padding-right: 16px; }
+      .canvas-card, .block { padding: 16px; }
+      #graph { height: 280px; }
+    }
+  </style>
 </head>
 <body>
-<div class="content-topbar">
-  <button class="nav-back" type="button" onclick="Qllq.go('../../../pages/subject-home.html?grade=senior&subject=math')">← 返回科目</button>
-  <span class="crumb">高中 · 数学</span>
-</div>
-<script src="../../../assets/js/app.js"></script>
-<script>if(window.Qllq&&!Qllq.isAuthed()){Qllq.go('../../../index.html');}</script>
+  <div class="content-topbar">
+    <button class="nav-back" type="button" onclick="Qllq.go('../../../pages/subject-home.html?grade=senior&subject=math')">← 返回科目</button>
+    <span class="crumb">高中 · 数学</span>
+  </div>
+  <script src="../../../assets/js/app.js"></script>
+  <script>if(window.Qllq&&!Qllq.isAuthed()){Qllq.go('../../../index.html');}</script>
 
+  <div class="page-head">
+    <h1>直线与圆的方程 · 交互演示</h1>
+    <p>拖动滑块改变参数，图形、方程与位置关系同步更新；手机端可横向滑动查看完整公式。</p>
+    <div class="seg">
+      <button class="active" data-mode="line-circle" onclick="switchMode('line-circle')">直线与圆</button>
+      <button data-mode="circle-circle" onclick="switchMode('circle-circle')">圆与圆</button>
+    </div>
+  </div>
 
-    <div class="header">
-        <h1>📐 第二章 直线与圆的方程</h1>
-        <div class="mode-switch">
-            <button class="mode-btn active" data-mode="line-circle" onclick="switchMode('line-circle')">直线与圆</button>
-            <button class="mode-btn" data-mode="circle-circle" onclick="switchMode('circle-circle')">圆与圆</button>
-        </div>
+  <div class="layout">
+    <div class="canvas-card">
+      <h3>坐标平面</h3>
+      <canvas id="graph"></canvas>
+      <div class="legend" id="legend"></div>
     </div>
 
-    <div class="app-container">
-        <!-- 图形绘制区 -->
-        <div class="canvas-wrapper">
-            <canvas id="graphCanvas"></canvas>
+    <div class="panel">
+      <div class="block">
+        <h3>参数调节</h3>
+        <div class="param active" id="p-lc">
+          <div class="row"><label>斜率 k</label><input type="range" id="lk" min="-5" max="5" step="0.1" value="1"><output id="ovk">1.0</output></div>
+          <div class="row"><label>截距 b</label><input type="range" id="lb" min="-5" max="5" step="0.1" value="1"><output id="ovb">1.0</output></div>
+          <div class="row"><label>圆心 h</label><input type="range" id="lh" min="-6" max="6" step="0.1" value="0"><output id="ovh">0.0</output></div>
+          <div class="row"><label>圆心 k</label><input type="range" id="lkc" min="-6" max="6" step="0.1" value="-2"><output id="ovkc">-2.0</output></div>
+          <div class="row"><label>半径 r</label><input type="range" id="lr" min="0.2" max="5" step="0.1" value="2"><output id="ovr">2.0</output></div>
         </div>
-
-        <!-- 侧边交互面板 -->
-        <div class="panel-wrapper">
-            
-            <!-- 参数控制区 -->
-            <div class="controls-section">
-                <!-- 直线与圆模式 -->
-                <div id="param-line-circle" class="param-group active">
-                    <div class="input-row"><label>直线 k</label><input type="range" id="sl-k" min="-5" max="5" step="0.1" value="1"><span class="val-box" id="val-k">1.0</span></div>
-                    <div class="input-row"><label>直线 b</label><input type="range" id="sl-b" min="-5" max="5" step="0.1" value="1"><span class="val-box" id="val-b">1.0</span></div>
-                    <div class="input-row"><label>圆心 h</label><input type="range" id="sl-h" min="-6" max="6" step="0.1" value="0"><span class="val-box" id="val-h">0.0</span></div>
-                    <div class="input-row"><label>圆心 k</label><input type="range" id="sl-kc" min="-6" max="6" step="0.1" value="-2"><span class="val-box" id="val-kc">-2.0</span></div>
-                    <div class="input-row"><label>半径 r</label><input type="range" id="sl-r" min="0.2" max="5" step="0.1" value="2"><span class="val-box" id="val-r">2.0</span></div>
-                </div>
-                <!-- 圆与圆模式 -->
-                <div id="param-circle-circle" class="param-group">
-                    <div class="input-row"><label>圆1 h</label><input type="range" id="sl-h1" min="-5" max="5" step="0.1" value="-2"><span class="val-box" id="val-h1">-2.0</span></div>
-                    <div class="input-row"><label>圆1 k</label><input type="range" id="sl-k1" min="-5" max="5" step="0.1" value="0"><span class="val-box" id="val-k1">0.0</span></div>
-                    <div class="input-row"><label>圆1 r</label><input type="range" id="sl-r1" min="0.5" max="4" step="0.1" value="2"><span class="val-box" id="val-r1">2.0</span></div>
-                    <div class="input-row" style="margin-top:8px; border-top:1px dashed #e2e8f0; padding-top:8px;"><label>圆2 h</label><input type="range" id="sl-h2" min="-5" max="5" step="0.1" value="3"><span class="val-box" id="val-h2">3.0</span></div>
-                    <div class="input-row"><label>圆2 k</label><input type="range" id="sl-k2" min="-5" max="5" step="0.1" value="1"><span class="val-box" id="val-k2">1.0</span></div>
-                    <div class="input-row"><label>圆2 r</label><input type="range" id="sl-r2" min="0.5" max="4" step="0.1" value="1.5"><span class="val-box" id="val-r2">1.5</span></div>
-                </div>
-            </div>
-
-            <!-- 公式与结论反馈区 -->
-            <div class="feedback-section">
-                <div class="card-box">
-                    <h3>📝 当前图形方程</h3>
-                    <div id="eq-display" class="eq-display">
-                        <span id="eq-line">\( y = 1.0x + 1.0 \)</span><br>
-                        <span id="eq-circle">\( (x - 0.0)^2 + (y + 2.0)^2 = 4.0 \)</span>
-                    </div>
-                </div>
-
-                <div class="card-box">
-                    <h3>🧮 位置关系判定</h3>
-                    <div id="logic-steps">
-                        <div class="step-box" id="position-result">
-                            计算圆心到直线的距离 \(d\)... 请调节滑块查看判定结果。
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="param" id="p-cc">
+          <div class="subhead">圆 1</div>
+          <div class="row"><label>h₁</label><input type="range" id="lh1" min="-5" max="5" step="0.1" value="-2"><output id="ovh1">-2.0</output></div>
+          <div class="row"><label>k₁</label><input type="range" id="lk1" min="-5" max="5" step="0.1" value="0"><output id="ovk1">0.0</output></div>
+          <div class="row"><label>r₁</label><input type="range" id="lr1" min="0.5" max="4" step="0.1" value="2"><output id="ovr1">2.0</output></div>
+          <div class="subhead">圆 2</div>
+          <div class="row"><label>h₂</label><input type="range" id="lh2" min="-5" max="5" step="0.1" value="3"><output id="ovh2">3.0</output></div>
+          <div class="row"><label>k₂</label><input type="range" id="lk2" min="-5" max="5" step="0.1" value="1"><output id="ovk2">1.0</output></div>
+          <div class="row"><label>r₂</label><input type="range" id="lr2" min="0.5" max="4" step="0.1" value="1.5"><output id="ovr2">1.5</output></div>
         </div>
+      </div>
+
+      <div class="block">
+        <h3>当前方程</h3>
+        <div class="eq" id="eq1"></div>
+        <div class="eq" id="eq2"></div>
+      </div>
+
+      <div class="block">
+        <h3>判定与推导</h3>
+        <div class="steps" id="steps"></div>
+        <div class="verdict" id="verdict"></div>
+      </div>
     </div>
+  </div>
 
 <script>
-    // === 核心配置与变量 ===
-    const canvas = document.getElementById('graphCanvas');
-    const ctx = canvas.getContext('2d');
-    let W, H;
-    let currentMode = 'line-circle';
+(function () {
+  var canvas = document.getElementById('graph');
+  var ctx = canvas.getContext('2d');
+  var RANGE = 10;
+  var mode = 'line-circle';
+  var W, H, scale, ox, oy;
 
-    // 坐标轴比例
-    const AXIS_RANGE = 10; // 数学坐标[-10, 10]
-    let scale = 1; // px / 单位数学坐标
-    let originX = 0, originY = 0;
+  function $(id) { return document.getElementById(id); }
+  var ids = ['lk','lb','lh','lkc','lr','lh1','lk1','lr1','lh2','lk2','lr2'];
+  var el = {};
+  ids.forEach(function (id) { el[id] = $(id); });
 
-    // DOM 元素缓存
-    const dom = {
-        sl_k: document.getElementById('sl-k'), sl_b: document.getElementById('sl-b'),
-        sl_h: document.getElementById('sl-h'), sl_kc: document.getElementById('sl-kc'), sl_r: document.getElementById('sl-r'),
-        sl_h1: document.getElementById('sl-h1'), sl_k1: document.getElementById('sl-k1'), sl_r1: document.getElementById('sl-r1'),
-        sl_h2: document.getElementById('sl-h2'), sl_k2: document.getElementById('sl-k2'), sl_r2: document.getElementById('sl-r2'),
-        val_k: document.getElementById('val-k'), val_b: document.getElementById('val-b'),
-        val_h: document.getElementById('val-h'), val_kc: document.getElementById('val-kc'), val_r: document.getElementById('val-r'),
-        val_h1: document.getElementById('val-h1'), val_k1: document.getElementById('val-k1'), val_r1: document.getElementById('val-r1'),
-        val_h2: document.getElementById('val-h2'), val_k2: document.getElementById('val-k2'), val_r2: document.getElementById('val-r2'),
-        eq_line: document.getElementById('eq-line'), eq_circle: document.getElementById('eq-circle'),
-        pos_result: document.getElementById('position-result'),
-        param_lc: document.getElementById('param-line-circle'),
-        param_cc: document.getElementById('param-circle-circle')
-    };
+  function m2p(mx, my) { return { x: ox + mx * scale, y: oy - my * scale }; }
 
-    // === 坐标转换函数 ===
-    function mToP(mx, my) {
-        return { px: originX + mx * scale, py: originY - my * scale };
+  function fitCanvas() {
+    var dpr = window.devicePixelRatio || 1;
+    W = canvas.clientWidth; H = canvas.clientHeight;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var pad = 28;
+    scale = Math.min((W - 2 * pad) / (2 * RANGE), (H - 2 * pad) / (2 * RANGE));
+    ox = W / 2; oy = H / 2;
+  }
+
+  function drawGrid() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--grid').trim() || '#e5ddd4';
+    for (var i = -RANGE; i <= RANGE; i++) {
+      if (i === 0) continue;
+      var a = m2p(i, 0), b = m2p(0, i);
+      ctx.beginPath(); ctx.moveTo(a.x, 0); ctx.lineTo(a.x, H); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, b.y); ctx.lineTo(W, b.y); ctx.stroke();
     }
-
-    // === 绘图引擎 ===
-    function drawAxes() {
-        ctx.clearRect(0, 0, W, H);
-        
-        // 网格
-        ctx.strokeStyle = "#e2e8f0";
-        ctx.lineWidth = 1;
-        for (let i = -AXIS_RANGE; i <= AXIS_RANGE; i++) {
-            if (i === 0) continue;
-            let p = mToP(i, 0);
-            ctx.beginPath(); ctx.moveTo(p.px, 0); ctx.lineTo(p.px, H); ctx.stroke();
-            p = mToP(0, i);
-            ctx.beginPath(); ctx.moveTo(0, p.py); ctx.lineTo(W, p.py); ctx.stroke();
-        }
-        
-        // 坐标轴
-        ctx.strokeStyle = "#1e293b";
-        ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.moveTo(0, originY); ctx.lineTo(W, originY); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(originX, 0); ctx.lineTo(originX, H); ctx.stroke();
-
-        // 刻度标签
-        ctx.fillStyle = "#475569";
-        ctx.font = "12px sans-serif";
-        ctx.textAlign = "center"; ctx.textBaseline = "top";
-        for (let i = -AXIS_RANGE; i <= AXIS_RANGE; i+=2) {
-            if (i !== 0) {
-                let p = mToP(i, 0);
-                ctx.fillText(i, p.px, originY + 4);
-                p = mToP(0, i);
-                ctx.textAlign = "right"; ctx.textBaseline = "middle";
-                ctx.fillText(i, originX - 4, p.py);
-            }
-        }
-        ctx.fillStyle = "#1e293b"; ctx.textAlign = "center"; ctx.textBaseline = "bottom";
-        ctx.fillText("O", originX - 12, originY - 4);
+    ctx.strokeStyle = 'rgba(61,61,61,0.55)';
+    ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(W, oy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(ox, 0); ctx.lineTo(ox, oy); ctx.stroke();
+    ctx.fillStyle = '#a89279';
+    ctx.font = '11px sans-serif';
+    for (var t = -RANGE; t <= RANGE; t += 2) {
+      if (t === 0) continue;
+      var px = m2p(t, 0), py = m2p(0, t);
+      ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+      ctx.fillText(t, px.x, oy + 5);
+      ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+      ctx.fillText(t, ox - 6, py.y);
     }
+    ctx.fillStyle = '#3d3d3d';
+    ctx.textAlign = 'right'; ctx.textBaseline = 'bottom';
+    ctx.fillText('O', ox - 4, oy - 4);
+    ctx.textAlign = 'left';
+    ctx.fillText('x', W - 12, oy - 6);
+    ctx.fillText('y', ox + 6, 12);
+  }
 
-    function drawLine(k, b, color = "#2563eb") {
-        if (!isFinite(k)) return; // 避免斜率无穷大导致崩溃
-        const x1 = -AXIS_RANGE, x2 = AXIS_RANGE;
-        const y1 = k * x1 + b, y2 = k * x2 + b;
-        const p1 = mToP(x1, y1), p2 = mToP(x2, y2);
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 3;
-        ctx.beginPath(); ctx.moveTo(p1.px, p1.py); ctx.lineTo(p2.px, p2.py); ctx.stroke();
-        // 标注直线方程
-        // 取中点
-        const midP = mToP(0, b);
-        ctx.fillStyle = color; ctx.font = "bold 14px sans-serif"; ctx.textAlign = "left"; ctx.textBaseline = "bottom";
-        let label = `y = ${parseFloat(k.toFixed(2))}x + ${parseFloat(b.toFixed(2))}`;
-        if(k===0) label = `y = ${b}`;
-        ctx.fillText(label, midP.px + 10, midP.py - 10);
+  function drawLine(k, b) {
+    var p1 = m2p(-RANGE, k * -RANGE + b);
+    var p2 = m2p(RANGE, k * RANGE + b);
+    ctx.strokeStyle = '#5a7a6b';
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+    var lp = m2p(0, b);
+    ctx.fillStyle = '#5a7a6b';
+    ctx.font = '12px sans-serif';
+    ctx.textAlign = lp.x > W - 70 ? 'right' : 'left';
+    ctx.textBaseline = 'bottom';
+    ctx.fillText('l: y=' + k.toFixed(1) + 'x' + (b >= 0 ? '+' : '') + b.toFixed(1), lp.x + 4, lp.y - 4);
+  }
+
+  function drawCircle(h, k, r, color) {
+    var c = m2p(h, k);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(c.x, c.y, r * scale, 0, Math.PI * 2); ctx.stroke();
+    ctx.fillStyle = color;
+    ctx.beginPath(); ctx.arc(c.x, c.y, 3.5, 0, Math.PI * 2); ctx.fill();
+    ctx.font = '11px sans-serif';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+    ctx.fillText('(' + h.toFixed(1) + ',' + k.toFixed(1) + ')', c.x + 6, c.y + 4);
+  }
+
+  function dot(mx, my, color, radius) {
+    var p = m2p(mx, my);
+    ctx.fillStyle = color;
+    ctx.beginPath(); ctx.arc(p.x, p.y, radius || 4, 0, Math.PI * 2); ctx.fill();
+  }
+
+  function dashed(a, b, color) {
+    ctx.save();
+    ctx.setLineDash([5, 5]);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+    ctx.restore();
+  }
+
+  function lineCircleModel(k, b, h, kc, r) {
+    var A = k, B = -1, C = b;
+    var d = Math.abs(A * h + B * kc + C) / Math.sqrt(A * A + B * B);
+    var t0 = (A * h + B * kc + C) / (A * A + B * B);
+    var foot = { x: h - A * t0, y: kc - B * t0 };
+    var q = b - kc;
+    var qa = 1 + k * k, qb = -2 * h + 2 * k * q, qc = h * h + q * q - r * r;
+    var disc = qb * qb - 4 * qa * qc;
+    var pts = [];
+    if (disc > 1e-6) {
+      var s = Math.sqrt(disc);
+      [-1, 1].forEach(function (sg) {
+        var x = (-qb + sg * s) / (2 * qa);
+        pts.push({ x: x, y: k * x + b });
+      });
+    } else if (Math.abs(disc) <= 1e-6) {
+      var x0 = -qb / (2 * qa);
+      pts.push({ x: x0, y: k * x0 + b });
     }
+    var status;
+    if (d > r + 1e-3) status = '相离';
+    else if (Math.abs(d - r) <= 1e-3) status = '相切';
+    else status = '相交';
+    return { d: d, foot: foot, pts: pts, status: status };
+  }
 
-    function drawCircle(h, k, r, color = "#dc2626") {
-        if (r < 0.001) return;
-        const p = mToP(h, k);
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 3;
-        ctx.beginPath(); ctx.arc(p.px, p.py, r * scale, 0, Math.PI * 2); ctx.stroke();
-        // 标注圆心
-        ctx.fillStyle = color; ctx.beginPath(); ctx.arc(p.px, p.py, 5, 0, Math.PI * 2); ctx.fill();
-        // 圆心坐标标注
-        ctx.fillStyle = color; ctx.font = "bold 14px sans-serif"; ctx.textAlign = "left"; ctx.textBaseline = "bottom";
-        ctx.fillText(`O(${h.toFixed(1)},${k.toFixed(1)})`, p.px + 8, p.py - 8);
-        // 方程公式标注
-        if (h === 0 && k === 0) return; // 标准位置留给圆内
-        ctx.fillStyle = "#374151"; ctx.textAlign = "left"; ctx.textBaseline = "top";
-        let eq = `(x${h > 0 ? '-' : '+'}${Math.abs(h).toFixed(1)})^2 + (y${k > 0 ? '-' : '+'}${Math.abs(k).toFixed(1)})^2 = ${r.toFixed(1)}^2`;
-        ctx.fillText(eq, p.px + 10, p.py + 10);
+  function circleCircleModel(h1, k1, r1, h2, k2, r2) {
+    var d = Math.hypot(h1 - h2, k1 - k2);
+    var sum = r1 + r2, diff = Math.abs(r1 - r2);
+    var status;
+    if (d > sum + 1e-3) status = '外离';
+    else if (Math.abs(d - sum) <= 1e-3) status = '外切';
+    else if (d > diff + 1e-3 && d < sum - 1e-3) status = '相交';
+    else if (Math.abs(d - diff) <= 1e-3) status = '内切';
+    else status = '内含';
+    return { d: d, sum: sum, diff: diff, status: status };
+  }
+
+  function tex(s) { return '\\(' + s + '\\)'; }
+  function renderInto(node) { if (window.QllqTex) { QllqTex.render(node); } }
+
+  function render() {
+    fitCanvas();
+    drawGrid();
+
+    if (mode === 'line-circle') {
+      var k = +el.lk.value, b = +el.lb.value, h = +el.lh.value, kc = +el.lkc.value, r = +el.lr.value;
+      drawLine(k, b);
+      drawCircle(h, kc, r, '#7ba0b8');
+      var m = lineCircleModel(k, b, h, kc, r);
+      var fp = m2p(m.foot.x, m.foot.y);
+      var cp = m2p(h, kc);
+      dashed(cp, fp, '#a89279');
+      dot(m.foot.x, m.foot.y, '#a89279', 3.5);
+      m.pts.forEach(function (pt) { dot(pt.x, pt.y, '#3d3d3d', 4); });
+
+      $('eq1').innerHTML = tex('l: y = ' + k.toFixed(1) + 'x ' + (b >= 0 ? '+' : '-') + ' ' + Math.abs(b).toFixed(1));
+      $('eq2').innerHTML = tex('C: (x ' + (h >= 0 ? '-' : '+') + ' ' + Math.abs(h).toFixed(1) + ')^2 + (y ' + (kc >= 0 ? '-' : '+') + ' ' + Math.abs(kc).toFixed(1) + ')^2 = ' + r.toFixed(1) + '^2');
+
+      $('steps').innerHTML =
+        '<div class="step"><span class="num">01</span>圆心到直线距离 ' + tex('d = \\dfrac{|' + k.toFixed(1) + '\\times' + h.toFixed(1) + ' + (-1)\\times(' + kc.toFixed(1) + ') + ' + b.toFixed(1) + '|}{\\sqrt{' + k.toFixed(1) + '^2+1}} = ' + m.d.toFixed(3)) + '</div>' +
+        '<div class="step"><span class="num">02</span>比较 ' + tex('d = ' + m.d.toFixed(3)) + ' 与 ' + tex('r = ' + r.toFixed(1)) + '</div>' +
+        '<div class="step"><span class="num">03</span>交点数 ' + tex(m.pts.length) + '（图中深色点为公共点，虚线为垂线段）</div>';
+      $('verdict').textContent = m.status + '（' + (m.status === '相离' ? '无公共点' : m.status === '相切' ? '一个公共点' : '两个公共点') + '）';
+
+      ['ovk','ovb','ovh','ovkc','ovr'].forEach(function (id) { $(id).textContent = ({ovk:k,ovb:b,ovh:h,ovkc:kc,ovr:r})[id].toFixed(1); });
+      renderInto($('steps')); renderInto($('eq1')); renderInto($('eq2'));
+
+    } else {
+      var h1 = +el.lh1.value, k1 = +el.lk1.value, r1 = +el.lr1.value;
+      var h2 = +el.lh2.value, k2 = +el.lk2.value, r2 = +el.lr2.value;
+      drawCircle(h1, k1, r1, '#7ba0b8');
+      drawCircle(h2, k2, r2, '#a89279');
+      var c1 = m2p(h1, k1), c2 = m2p(h2, k2);
+      dashed(c1, c2, '#c9a88c');
+      var mm = circleCircleModel(h1, k1, r1, h2, k2, r2);
+
+      $('eq1').innerHTML = tex('C_1: (x ' + (h1 >= 0 ? '-' : '+') + ' ' + Math.abs(h1).toFixed(1) + ')^2 + (y ' + (k1 >= 0 ? '-' : '+') + ' ' + Math.abs(k1).toFixed(1) + ')^2 = ' + r1.toFixed(1) + '^2');
+      $('eq2').innerHTML = tex('C_2: (x ' + (h2 >= 0 ? '-' : '+') + ' ' + Math.abs(h2).toFixed(1) + ')^2 + (y ' + (k2 >= 0 ? '-' : '+') + ' ' + Math.abs(k2).toFixed(1) + ')^2 = ' + r2.toFixed(1) + '^2');
+
+      $('steps').innerHTML =
+        '<div class="step"><span class="num">01</span>圆心距 ' + tex('d = ' + mm.d.toFixed(3)) + '</div>' +
+        '<div class="step"><span class="num">02</span>半径和 ' + tex('r_1+r_2 = ' + mm.sum.toFixed(2)) + '，半径差 ' + tex('|r_1-r_2| = ' + mm.diff.toFixed(2)) + '</div>' +
+        '<div class="step"><span class="num">03</span>按 ' + tex('d') + ' 与和、差的大小关系判定（虚线为圆心连线）</div>';
+      $('verdict').textContent = mm.status;
+
+      [['ovh1',h1],['ovk1',k1],['ovr1',r1],['ovh2',h2],['ovk2',k2],['ovr2',r2]].forEach(function (pair) {
+        $(pair[0]).textContent = pair[1].toFixed(1);
+      });
+      renderInto($('steps')); renderInto($('eq1')); renderInto($('eq2'));
     }
+  }
 
-    // === 数学核心逻辑 ===
-    function calcLineCircle(k, b, h, kc, r) {
-        // 直线一般式: kx - y + b = 0 => A=k, B=-1, C=b
-        const A = k, B = -1, C = b;
-        // 圆心到直线距离 d = |A*h + B*kc + C| / sqrt(A^2 + B^2)
-        const numerator = Math.abs(A * h + B * kc + C);
-        const denominator = Math.sqrt(A*A + B*B);
-        const d = numerator / denominator;
-        
-        let status = "", color = "";
-        let stepText = "";
-        if (d > r + 0.001) { status = "相离 (无公共点)"; color = "tag-separate"; stepText = "圆心距 d > 半径 r，直线与圆没有交点。"; }
-        else if (Math.abs(d - r) <= 0.001) { status = "相切 (唯一公共点)"; color = "tag-tangent"; stepText = "圆心距 d = 半径 r，直线与圆只有一个交点（切点）。"; }
-        else { status = "相交 (两个公共点)"; color = "tag-intersect"; stepText = "圆心距 d < 半径 r，直线与圆产生两个交点，截得一条弦。"; }
-        
-        return { d, r, status, color, stepText };
-    }
-
-    function calcCircleCircle(h1, k1, r1, h2, k2, r2) {
-        const d = Math.sqrt((h1-h2)**2 + (k1-k2)**2);
-        const sumR = r1 + r2; const diffR = Math.abs(r1 - r2);
-        
-        let status = "", color = "", stepText = "";
-        if (d > sumR + 0.001) { status = "外离"; color = "tag-separate"; stepText = `圆心距 d > 两半径之和 (${sumR.toFixed(2)})。无公共点，内含4条公切线。`; }
-        else if (Math.abs(d - sumR) <= 0.001) { status = "外切"; color = "tag-tangent"; stepText = `圆心距 d = 两半径之和 (${sumR.toFixed(2)})。唯一公共点，3条公切线。`; }
-        else if (d > diffR + 0.001 && d < sumR - 0.001) { status = "相交"; color = "tag-intersect"; stepText = `两半径差 (${diffR.toFixed(2)}) < 圆心距 d < 两半径和 (${sumR.toFixed(2)})。两个交点，2条公切线。`; }
-        else if (Math.abs(d - diffR) <= 0.001) { status = "内切"; color = "tag-tangent"; stepText = `圆心距 d = 两半径差 (${diffR.toFixed(2)})。唯一公共点，1条公切线。`; }
-        else if (d < diffR - 0.001 && d >= 0) { status = "内含"; color = "tag-separate"; stepText = `圆心距 d < 两半径差 (${diffR.toFixed(2)})。无公共点，0条公切线。`; }
-        return { d, status, color, stepText };
-    }
-
-    // === 主渲染循环 ===
-    function render() {
-        W = canvas.clientWidth; H = canvas.clientHeight;
-        canvas.width = W; canvas.height = H;
-        // 动态缩放 (留出边距)
-        const margin = 40; // px
-        const effectiveW = W - 2 * margin;
-        const effectiveH = H - 2 * margin;
-        scale = Math.min(effectiveW / (2 * AXIS_RANGE), effectiveH / (2 * AXIS_RANGE));
-        originX = W / 2; originY = H / 2;
-
-        drawAxes();
-
-        let k, b, h, kc, r, h1, k1, r1, h2, k2, r2;
-
-        if (currentMode === 'line-circle') {
-            k = parseFloat(dom.sl_k.value);
-            b = parseFloat(dom.sl_b.value);
-            h = parseFloat(dom.sl_h.value);
-            kc = parseFloat(dom.sl_kc.value);
-            r = parseFloat(dom.sl_r.value);
-
-            // 1. 绘图
-            drawLine(k, b);
-            drawCircle(h, kc, r);
-
-            // 2. 更新公式
-            dom.eq_line.innerHTML = `\\( y = ${k.toFixed(1)}x ${b >= 0 ? '+' : '-'} ${Math.abs(b).toFixed(1)} \\)`;
-            dom.eq_circle.innerHTML = `\\( (x ${h >= 0 ? '-' : '+'} ${Math.abs(h).toFixed(1)})^2 + (y ${kc >= 0 ? '-' : '+'} ${Math.abs(kc).toFixed(1)})^2 = ${r.toFixed(1)}^2 \\)`;
-
-            // 3. 计算逻辑并反馈
-            const result = calcLineCircle(k, b, h, kc, r);
-            dom.pos_result.innerHTML = `
-                <div><strong>📐 求解过程（几何法）：</strong></div>
-                <div>直线方程：\( y = ${k.toFixed(1)}x + ${b.toFixed(1)} \)</div>
-                <div>圆心坐标：\( O(${h.toFixed(1)}, ${kc.toFixed(1)}) \)，半径 \( r = ${r.toFixed(1)} \)</div>
-                <div style="margin-top:6px;">圆心到直线的距离 \( d = \\frac{|${k.toFixed(1)} \\times ${h.toFixed(1)} - ${kc.toFixed(1)} + ${b.toFixed(1)}|}{\\sqrt{${k.toFixed(1)}^2 + (-1)^2}} = ${result.d.toFixed(3)} \)</div>
-                <div>比较 \( d \)（${result.d.toFixed(3)}）与 \( r \)（${result.r.toFixed(1)}）</div>
-                <div class="sub-step">结论：<span class="tag-result ${result.color}">${result.status}</span></div>
-                <div style="margin-top:6px;color:#475569;font-size:13px;">解析：${result.stepText}</div>
-            `;
-            renderMathInElement(dom.pos_result);
-
-        } else if (currentMode === 'circle-circle') {
-            h1 = parseFloat(dom.sl_h1.value); k1 = parseFloat(dom.sl_k1.value); r1 = parseFloat(dom.sl_r1.value);
-            h2 = parseFloat(dom.sl_h2.value); k2 = parseFloat(dom.sl_k2.value); r2 = parseFloat(dom.sl_r2.value);
-
-            // 1. 绘图
-            drawCircle(h1, k1, r1, "#2563eb"); // 蓝色圆1
-            drawCircle(h2, k2, r2, "#dc2626"); // 红色圆2
-
-            // 2. 更新公式
-            dom.eq_line.innerHTML = `圆1：\\( (x ${h1>=0?'-':'+'} ${Math.abs(h1).toFixed(1)})^2 + (y ${k1>=0?'-':'+'} ${Math.abs(k1).toFixed(1)})^2 = ${r1.toFixed(1)}^2 \\)`;
-            dom.eq_circle.innerHTML = `圆2：\\( (x ${h2>=0?'-':'+'} ${Math.abs(h2).toFixed(1)})^2 + (y ${k2>=0?'-':'+'} ${Math.abs(k2).toFixed(1)})^2 = ${r2.toFixed(1)}^2 \\)`;
-
-            // 3. 计算逻辑并反馈
-            const result = calcCircleCircle(h1, k1, r1, h2, k2, r2);
-            dom.pos_result.innerHTML = `
-                <div><strong>📐 求解过程（几何法）：</strong></div>
-                <div>圆心1：\( O_1(${h1.toFixed(1)}, ${k1.toFixed(1)}) \)，半径 \( r_1 = ${r1.toFixed(1)} \)</div>
-                <div>圆心2：\( O_2(${h2.toFixed(1)}, ${k2.toFixed(1)}) \)，半径 \( r_2 = ${r2.toFixed(1)} \)</div>
-                <div style="margin-top:6px;">两圆心距 \( d = \\sqrt{(${h1.toFixed(1)} - ${h2.toFixed(1)})^2 + (${k1.toFixed(1)} - ${k2.toFixed(1)})^2} = ${result.d.toFixed(3)} \)</div>
-                <div>比较 \( d \)（${result.d.toFixed(3)}）与 \( r_1+r_2 \)（${(r1+r2).toFixed(2)}）、\( |r_1-r_2| \)（${Math.abs(r1-r2).toFixed(2)}）</div>
-                <div class="sub-step">结论：<span class="tag-result ${result.color}">${result.status}</span></div>
-                <div style="margin-top:6px;color:#475569;font-size:13px;">解析：${result.stepText}</div>
-            `;
-            renderMathInElement(dom.pos_result);
-        }
-
-        // 更新数值显示
-        if (currentMode === 'line-circle') {
-            dom.val_k.innerText = k.toFixed(1); dom.val_b.innerText = b.toFixed(1);
-            dom.val_h.innerText = h.toFixed(1); dom.val_kc.innerText = kc.toFixed(1); dom.val_r.innerText = r.toFixed(1);
-        } else {
-            dom.val_h1.innerText = parseFloat(dom.sl_h1.value).toFixed(1); dom.val_k1.innerText = parseFloat(dom.sl_k1.value).toFixed(1); dom.val_r1.innerText = parseFloat(dom.sl_r1.value).toFixed(1);
-            dom.val_h2.innerText = parseFloat(dom.sl_h2.value).toFixed(1); dom.val_k2.innerText = parseFloat(dom.sl_k2.value).toFixed(1); dom.val_r2.innerText = parseFloat(dom.sl_r2.value).toFixed(1);
-        }
-    }
-
-    // === 模式切换 & 事件绑定 ===
-    function switchMode(mode) {
-        currentMode = mode;
-        document.querySelectorAll('.mode-btn').forEach(el => el.classList.remove('active'));
-        document.querySelector(`.mode-btn[data-mode="${mode}"]`).classList.add('active');
-        
-        if (mode === 'line-circle') {
-            dom.param_lc.classList.add('active');
-            dom.param_cc.classList.remove('active');
-            dom.eq_line.style.display = 'block';
-        } else {
-            dom.param_cc.classList.add('active');
-            dom.param_lc.classList.remove('active');
-            dom.eq_line.style.display = 'block'; // 这里显示圆1，圆2在下一行
-        }
-        render();
-    }
-
-    // 监听所有滑块变化
-    document.querySelectorAll('input[type="range"]').forEach(input => {
-        input.addEventListener('input', render);
-        input.addEventListener('change', render);
+  window.switchMode = function (m) {
+    mode = m;
+    document.querySelectorAll('.seg button').forEach(function (btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-mode') === m);
     });
+    $('p-lc').classList.toggle('active', m === 'line-circle');
+    $('p-cc').classList.toggle('active', m === 'circle-circle');
+    $('legend').innerHTML = m === 'line-circle'
+      ? '<span><i class="swatch" style="background:#5a7a6b"></i>直线</span><span><i class="swatch" style="background:#7ba0b8"></i>圆</span><span><i class="swatch" style="background:#a89279"></i>垂线段</span>'
+      : '<span><i class="swatch" style="background:#7ba0b8"></i>圆 1</span><span><i class="swatch" style="background:#a89279"></i>圆 2</span><span><i class="swatch" style="background:#c9a88c"></i>圆心连线</span>';
+    render();
+  };
 
-    // 窗口大小自适应
-    let resizeTimer;
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(render, 100);
-    });
-
-    // 初始化渲染
-    window.onload = () => {
-        render();
-    };
+  ids.forEach(function (id) {
+    el[id].addEventListener('input', render);
+    el[id].addEventListener('change', render);
+  });
+  var rt;
+  window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(render, 120); });
+  document.addEventListener('DOMContentLoaded', function () { window.switchMode('line-circle'); });
+  window.switchMode('line-circle');
+})();
 </script>
 </body>
 </html>

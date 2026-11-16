@@ -4,14 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>苏科版九上 · 重点题型全解（公式渲染）</title>
-    <!-- MathJax 配置与加载（支持 \(...\) 行内公式） -->
-    <script>
-        MathJax = {
-            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
-            svg: { fontCache: 'global' }
-        };
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+    <!-- 公式渲染：KaTeX 双 CDN 回退（见 assets/js/tex.js） -->
+    <script src="../../../assets/js/tex.js"></script>
     <style>
         * {
             margin: 0;
@@ -142,10 +136,6 @@
             .chapter-title { font-size: 19px; }
             .section-name { font-size: 16px; }
             .key-point { font-size: 14px; }
-        }
-        /* 公式加载时避免闪动 */
-        .MathJax_SVG {
-            display: inline !important;
         }
     </style>
   <link rel="stylesheet" href="../../../assets/css/nordic.css">

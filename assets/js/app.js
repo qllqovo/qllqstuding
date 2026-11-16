@@ -53,8 +53,7 @@
       chemistry: [
         { file: '../content/senior/chemistry/qualifying.html', title: '化学合格考 · 学习工具' },
         { file: '../content/senior/chemistry/knowledge-2023.html', title: '2023 化学会考知识点' },
-        { file: '../content/senior/chemistry/module-strategy.html', title: '会考重点知识模块突破策略' },
-        { file: '../content/senior/chemistry/question-bank.html', title: '会考题库试题及答案' }
+        { file: '../content/senior/chemistry/module-strategy.html', title: '会考重点知识模块突破策略' }
       ]
     }
   };

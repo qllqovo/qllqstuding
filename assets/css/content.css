@@ -304,3 +304,111 @@ details summary,
     transition: none !important;
   }
 }
+
+/* ============================================================
+ * 公式：移动端防溢出，可横向滑动查看
+ * ============================================================ */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  padding: 6px 2px;
+}
+.katex-display > .katex { white-space: normal; }
+.katex { font-size: 1.05em; }
+
+/* ============================================================
+ * 折叠收纳（Accordion）：按键交互收纳内容
+ * ============================================================ */
+.accordion {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.accordion .acc-intro {
+  color: var(--color-wood);
+  font-size: 14px;
+  font-weight: 300;
+}
+.accordion details {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--border-quiet);
+  border-radius: 2px;
+  padding: 0 24px;
+  transition: border-color var(--transition-slow);
+}
+.accordion details[open] { border-color: var(--border-strong); }
+.accordion summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 20px 0;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--color-charcoal);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.accordion summary::-webkit-details-marker { display: none; }
+.accordion summary .mark {
+  color: var(--color-wood);
+  font-weight: 300;
+  font-size: 18px;
+  flex-shrink: 0;
+  transition: transform var(--transition-slow);
+}
+.accordion details[open] > summary .mark { transform: rotate(45deg); }
+.accordion .acc-body {
+  padding: 0 0 24px;
+  font-size: 14px;
+  font-weight: 300;
+}
+.accordion .acc-body p { margin: 10px 0; color: var(--color-charcoal); }
+.accordion .acc-body ul,
+.accordion .acc-body ol { padding-left: 20px; margin: 8px 0; }
+.accordion .acc-body li { margin: 6px 0; line-height: 1.8; color: var(--color-charcoal); }
+.accordion details details {
+  margin: 12px 0;
+  padding: 0 16px;
+  background: rgba(255, 255, 255, 0.4);
+}
+.accordion details details summary {
+  font-size: 14px;
+  padding: 14px 0;
+  color: var(--color-moss);
+}
+.accordion table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 13px;
+}
+.accordion th,
+.accordion td {
+  border: 1px solid var(--border-quiet);
+  padding: 8px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+.accordion th {
+  background: rgba(201, 168, 140, 0.14);
+  font-weight: 400;
+  color: var(--color-charcoal);
+}
+.accordion .pill {
+  display: inline-block;
+  padding: 2px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 2px;
+  font-size: 12px;
+  color: var(--color-wood);
+  margin-right: 8px;
+}
+@media (max-width: 768px) {
+  .accordion { padding: 24px 16px; }
+  .accordion details { padding: 0 16px; }
+}
