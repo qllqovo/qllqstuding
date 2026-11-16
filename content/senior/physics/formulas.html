@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>高中物理公式速记本</title>
+    <style>
+        :root {
+            --bg: #f4f7f9;
+            --card-bg: #ffffff;
+            --primary: #0ea5e9;
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            padding: 16px 12px 50px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 头部 */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 22px;
+            color: #0f172a;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .header p {
+            font-size: 13px;
+            color: var(--text-sub);
+            margin-top: 4px;
+        }
+
+        /* 卡片折叠设计 */
+        details {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+        }
+
+        summary {
+            padding: 16px 18px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            list-style: none;
+            color: #0f172a;
+            border-left: 4px solid var(--primary);
+            background: #ffffff;
+        }
+        summary::-webkit-details-marker { display: none; }
+        
+        /* 使用文字代替容易乱码的符号 */
+        .status-text {
+            font-size: 13px;
+            color: #94a3b8;
+            font-weight: normal;
+        }
+        
+        /* 分类颜色边框 */
+        details.mech summary { border-left-color: #3b82f6; }
+        details.elec summary { border-left-color: #f59e0b; }
+        details.optics summary { border-left-color: #8b5cf6; }
+
+        /* 内容区 */
+        .content {
+            padding: 0 16px 16px;
+        }
+
+        /* 单个公式条目 */
+        .f-item {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+            border: 1px solid #f1f5f9;
+        }
+        .f-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+        
+        /* 纯文本公式展示区，彻底告别乱码 */
+        .f-math {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 17px;
+            color: #0f172a;
+            background: #ffffff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px dashed #cbd5e1;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+        }
+        .f-math i {
+            font-style: italic;
+            color: #b91c1c;
+        }
+        
+        /* 提示与口诀 */
+        .f-tip {
+            font-size: 13px;
+            color: #b91c1c;
+            background: #fef2f2;
+            padding: 6px 10px;
+            border-radius: 6px;
+            margin-top: 8px;
+        }
+        .f-tip.blue {
+            color: #1d4ed8;
+            background: #eff6ff;
+        }
+        .f-tip.green {
+            color: #047857;
+            background: #ecfdf5;
+        }
+
+        /* 上下标原生样式 */
+        sup { font-size: 12px; }
+        sub { font-size: 12px; }
+    </style>
+  <link rel="stylesheet" href="../../assets/css/nordic.css">
+  <link rel="stylesheet" href="../../assets/css/content.css">
+</head>
+<body>
+<div class="content-topbar">
+  <button class="nav-back" type="button" onclick="Qllq.go('../../pages/subject-home.html?grade=senior&subject=physics')">← 返回科目</button>
+  <span class="crumb">高中 · 物理</span>
+</div>
+<script src="../../assets/js/app.js"></script>
+<script>if(window.Qllq&&!Qllq.isAuthed()){Qllq.go('../../index.html');}</script>
+
+
+<div class="container">
+    <div class="header">
+        <h1>🧲 高中物理公式速记本</h1>
+        <p>文字排版版 · 清晰无乱码 · 核心必背</p>
+    </div>
+
+    <!-- 模块 1：运动学与动力学 -->
+    <details class="mech" open>
+        <summary>
+            <span>🚀 运动学与动力学</span>
+            <span class="status-text">点击折叠</span>
+        </summary>
+        <div class="content">
+            <div class="f-item">
+                <div class="f-name">1. 匀变速直线运动核心公式</div>
+                <div class="f-math">速度公式：<i>v</i> = <i>v</i><sub>0</sub> + <i>a</i><i>t</i></div>
+                <div class="f-math">位移公式：<i>x</i> = <i>v</i><sub>0</sub><i>t</i> + (1/2)·<i>a</i><i>t</i><sup>2</sup></div>
+                <div class="f-math">速度位移公式：<i>v</i><sup>2</sup> - <i>v</i><sub>0</sub><sup>2</sup> = 2<i>a</i><i>x</i></div>
+                <div class="f-tip">💡 不涉及时间时，优先使用速度位移公式。</div>
+            </div>
+
+            <div class="f-item">
+                <div class="f-name">2. 牛顿第二定律</div>
+                <div class="f-math">合力：<i>F</i><sub>合</sub> = <i>m</i>·<i>a</i></div>
+                <div class="f-tip green">💡 力与加速度同生同灭，方向永远一致。</div>
+            </div>
+
+            <div class="f-item">
+                <div class="f-name">3. 平抛运动</div>
+                <div class="f-math">水平方向：<i>x</i> = <i>v</i><sub>0</sub>·<i>t</i> ， <i>v</i><sub>x</sub> = <i>v</i><sub>0</sub></div>
+                <div class="f-math">竖直方向：<i>y</i> = (1/2)·<i>g</i>·<i>t</i><sup>2</sup> ， <i>v</i><sub>y</sub> = <i>g</i>·<i>t</i></div>
+            </div>
+        </div>
+    </details>
+
+    <!-- 模块 2：功、能与动量 -->
+    <details class="mech">
+        <summary>
+            <span>⚡ 功、能与动量</span>
+            <span class="status-text">点击折叠</span>
+        </summary>
+        <div class="content">
+            <div class="f-item">
+                <div class="f-name">1. 功与功率</div>
+                <div class="f-math">功：<i>W</i> = <i>F</i>·<i>x</i>·cos<i>θ</i></div>
+                <div class="f-math">功率：<i>P</i> = <i>W</i> / <i>t</i> = <i>F</i>·<i>v</i></div>
+            </div>
+
+            <div class="f-item">
+                <div class="f-name">2. 动能定理</div>
+                <div class="f-math">合外力做功：<i>W</i><sub>合</sub> = <i>E</i><sub>k末</sub> - <i>E</i><sub>k初</sub></div>
+                <div class="f-math">动能公式：<i>E</i><sub>k</sub> = (1/2)·<i>m</i>·<i>v</i><sup>2</sup></div>
+            </div>
+
+            <div class="f-item">
+                <div class="f-name">3. 动量定理</div>
+                <div class="f-math">冲量等于动量变化：<i>F</i><sub>合</sub>·<i>t</i> = <i>m</i>·<i>v</i><sub>2</sub> - <i>m</i>·<i>v</i><sub>1</sub></div>
+                <div class="f-tip">💡 动量是矢量，列式前必须先规定正方向！</div>
+            </div>
+        </div>
+    </details>
+
+    <!-- 模块 3：万有引力 -->
+    <details class="mech">
+        <summary>
+            <span>🪐 万有引力与航天</span>
+            <span class="status-text">点击折叠</span>
+        </summary>
+        <div class="content">
+            <div class="f-item">
+                <div class="f-name">1. 黄金代换公式</div>
+                <div class="f-math"><i>G</i>·<i>M</i> = <i>g</i>·<i>R</i><sup>2</sup></div>
+                <div class="f-tip">💡 忽略自转时，星球表面重力等于万有引力。</div>
+            </div>
+            <div class="f-item">
+                <div class="f-name">2. 万有引力提供向心力</div>
+                <div class="f-math"><i>F</i><sub>万</sub> = <i>G</i>·(<i>M</i>·<i>m</i>) / <i>r</i><sup>2</sup></div>
+                <div class="f-math">等于：<i>m</i>·<i>v</i><sup>2</sup>/<i>r</i> = <i>m</i>·<i>ω</i><sup>2</sup>·<i>r</i> = <i>m</i>·(4<i>π</i><sup>2</sup>/<i>T</i><sup>2</sup>)·<i>r</i></div>
+            </div>
+        </div>
+    </details>
+
+    <!-- 模块 4：静电场 -->
+    <details class="elec">
+        <summary>
+            <span>⚡ 静电场</span>
+            <span class="status-text">点击折叠</span>
+        </summary>
+        <div class="content">
+            <div class="f-item">
+                <div class="f-name">1. 库仑定律</div>
+                <div class="f-math"><i>F</i> = <i>k</i>·(<i>q</i><sub>1</sub>·<i>q</i><sub>2</sub>) / <i>r</i><sup>2</sup></div>
+            </div>
+            <div class="f-item">
+                <div class="f-name">2. 电场强度 (E)</div>
+                <div class="f-math">定义式：<i>E</i> = <i>F</i> / <i>q</i> （适用于所有电场）</div>
+                <div class="f-math">点电荷场强：<i>E</i> = <i>k</i>·<i>Q</i> / <i>r</i><sup>2</sup></div>
+                <div class="f-math">匀强电场：<i>E</i> = <i>U</i> / <i>d</i></div>
+            </div>
+        </div>
+    </details>
+
+    <!-- 模块 5：磁场与电磁感应 -->
+    <details class="elec">
+        <summary>
+            <span>🔋 磁场与电磁感应</span>
+            <span class="status-text">点击折叠</span>
+        </summary>
+        <div class="content">
+            <div class="f-item">
+                <div class="f-name">1. 安培力与洛伦兹力</div>
+                <div class="f-math">安培力：<i>F</i> = <i>B</i>·<i>I</i>·<i>L</i> （电流垂直于磁场）</div>
+                <div class="f-math">洛伦兹力：<i>F</i> = <i>q</i>·<i>v</i>·<i>B</i> （速度垂直于磁场）</div>
+            </div>
+            <div class="f-item">
+                <div class="f-name">2. 法拉第电磁感应定律</div>
+                <div class="f-math">感应电动势：<i>E</i> = <i>n</i>·(Δ<i>Φ</i> / Δ<i>t</i>)</div>
+                <div class="f-math">切割磁感线：<i>E</i> = <i>B</i>·<i>L</i>·<i>v</i></div>
+            </div>
+        </div>
+    </details>
+
+    <!-- 模块 6：近代物理 -->
+    <details class="optics">
+        <summary>
+            <span>💡 近代物理与光学</span>
+            <span class="status-text">点击折叠</span>
+        </summary>
+        <div class="content">
+            <div class="f-item">
+                <div class="f-name">1. 光电效应方程</div>
+                <div class="f-math">最大初动能：<i>E</i><sub>k</sub> = <i>h</i>·<i>ν</i> - <i>W</i><sub>0</sub></div>
+                <div class="f-tip">💡 <i>W</i><sub>0</sub> 是逸出功，<i>h</i> 是普朗克常量，<i>ν</i> 是入射光频率。</div>
+            </div>
+            <div class="f-item">
+                <div class="f-name">2. 质能方程与折射率</div>
+                <div class="f-math">质能方程：<i>E</i> = <i>m</i>·<i>c</i><sup>2</sup></div>
+                <div class="f-math">折射率公式：<i>n</i> = <i>c</i> / <i>v</i></div>
+            </div>
+        </div>
+    </details>
+
+</div>
+
+</body>
+</html>
