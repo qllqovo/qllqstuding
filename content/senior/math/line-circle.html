@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>直线与圆的方程 - 教学交互系统</title>
+    <!-- 公式渲染引擎 KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    <style>
+        :root {
+            --primary: #4f46e5; --primary-light: #818cf8;
+            --bg: #f8fafc; --card: #ffffff; --text: #1e293b;
+            --radius: 12px; --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --canvas-bg: #f1f5f9;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; display: flex; flex-direction: column;
+        }
+
+        /* 顶部导航 */
+        .header {
+            background: var(--card); padding: 12px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; z-index: 10;
+        }
+        .header h1 { font-size: 18px; font-weight: 600; color: var(--primary); }
+        .mode-switch {
+            display: flex; gap: 8px; background: #f1f5f9; padding: 4px; border-radius: 8px;
+        }
+        .mode-btn {
+            padding: 6px 12px; border: none; background: transparent; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; color: #64748b;
+        }
+        .mode-btn.active { background: white; color: var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .mode-btn:hover:not(.active) { color: var(--text); }
+
+        /* 主体布局（响应式核心） */
+        .app-container {
+            display: flex; flex: 1; overflow: hidden; flex-direction: row;
+        }
+
+        /* 左侧图形区 */
+        .canvas-wrapper {
+            flex: 1; background: var(--canvas-bg); position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center;
+        }
+        #graphCanvas {
+            width: 100%; height: 100%; display: block; cursor: grab; touch-action: none;
+        }
+
+        /* 右侧控制与反馈区 */
+        .panel-wrapper {
+            width: 380px; background: var(--card); border-left: 1px solid #e2e8f0;
+            display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0;
+        }
+        
+        /* 控制区域 */
+        .controls-section { padding: 16px 20px; border-bottom: 1px solid #f1f5f9; flex-shrink: 0; }
+        .param-group { display: none; flex-direction: column; gap: 12px; }
+        .param-group.active { display: flex; }
+        .input-row { display: flex; align-items: center; gap: 12px; justify-content: space-between; }
+        .input-row label { font-size: 14px; font-weight: 500; min-width: 30px; }
+        input[type="range"] { flex: 1; accent-color: var(--primary); height: 4px; cursor: pointer; }
+        .val-box { background: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-size: 13px; min-width: 40px; text-align: center; font-weight: 600; }
+
+        /* 反馈区域 */
+        .feedback-section { padding: 16px 20px; flex: 1; overflow-y: auto; }
+        .card-box { background: #f8fafc; padding: 12px 16px; border-radius: var(--radius); margin-bottom: 16px; border: 1px solid #e2e8f0; }
+        .card-box h3 { font-size: 14px; font-weight: 600; color: #475569; margin-bottom: 6px; }
+        .eq-display { font-size: 16px; padding: 8px 0; min-height: 24px; color: var(--text); }
+        
+        .step-box { margin-top: 10px; padding: 10px; background: white; border-radius: 8px; border-left: 4px solid var(--primary-light); font-size: 14px; line-height: 1.6; }
+        .step-box .sub-step { color: #475569; padding-left: 12px; font-size: 13px; }
+        .tag-result { display: inline-block; padding: 2px 10px; border-radius: 20px; font-weight: 600; font-size: 14px; margin-top: 4px; }
+        .tag-intersect { background: #dcfce7; color: #15803d; }
+        .tag-tangent { background: #fef9c3; color: #854d0e; }
+        .tag-separate { background: #fee2e2; color: #b91c1c; }
+
+        /* ===== 响应式断点 ===== */
+        @media screen and (max-width: 1024px) {
+            .panel-wrapper { width: 320px; }
+        }
+
+        @media screen and (max-width: 768px) {
+            body { overflow-y: auto; height: auto; }
+            .app-container { flex-direction: column; height: calc(100vh - 60px); }
+            .canvas-wrapper { height: 45vh; flex: none; }
+            .panel-wrapper { width: 100%; height: 55vh; border-left: none; border-top: 1px solid #e2e8f0; }
+        }
+
+        @media screen and (max-width: 480px) {
+            .header h1 { font-size: 15px; }
+            .mode-btn { padding: 4px 10px; font-size: 12px; }
+            .controls-section, .feedback-section { padding: 12px; }
+            .card-box { padding: 10px; }
+        }
+    </style>
+  <link rel="stylesheet" href="../../assets/css/nordic.css">
+  <link rel="stylesheet" href="../../assets/css/content.css">
+</head>
+<body>
+<div class="content-topbar">
+  <button class="nav-back" type="button" onclick="Qllq.go('../../pages/subject-home.html?grade=senior&subject=math')">← 返回科目</button>
+  <span class="crumb">高中 · 数学</span>
+</div>
+<script src="../../assets/js/app.js"></script>
+<script>if(window.Qllq&&!Qllq.isAuthed()){Qllq.go('../../index.html');}</script>
+
+
+    <div class="header">
+        <h1>📐 第二章 直线与圆的方程</h1>
+        <div class="mode-switch">
+            <button class="mode-btn active" data-mode="line-circle" onclick="switchMode('line-circle')">直线与圆</button>
+            <button class="mode-btn" data-mode="circle-circle" onclick="switchMode('circle-circle')">圆与圆</button>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <!-- 图形绘制区 -->
+        <div class="canvas-wrapper">
+            <canvas id="graphCanvas"></canvas>
+        </div>
+
+        <!-- 侧边交互面板 -->
+        <div class="panel-wrapper">
+            
+            <!-- 参数控制区 -->
+            <div class="controls-section">
+                <!-- 直线与圆模式 -->
+                <div id="param-line-circle" class="param-group active">
+                    <div class="input-row"><label>直线 k</label><input type="range" id="sl-k" min="-5" max="5" step="0.1" value="1"><span class="val-box" id="val-k">1.0</span></div>
+                    <div class="input-row"><label>直线 b</label><input type="range" id="sl-b" min="-5" max="5" step="0.1" value="1"><span class="val-box" id="val-b">1.0</span></div>
+                    <div class="input-row"><label>圆心 h</label><input type="range" id="sl-h" min="-6" max="6" step="0.1" value="0"><span class="val-box" id="val-h">0.0</span></div>
+                    <div class="input-row"><label>圆心 k</label><input type="range" id="sl-kc" min="-6" max="6" step="0.1" value="-2"><span class="val-box" id="val-kc">-2.0</span></div>
+                    <div class="input-row"><label>半径 r</label><input type="range" id="sl-r" min="0.2" max="5" step="0.1" value="2"><span class="val-box" id="val-r">2.0</span></div>
+                </div>
+                <!-- 圆与圆模式 -->
+                <div id="param-circle-circle" class="param-group">
+                    <div class="input-row"><label>圆1 h</label><input type="range" id="sl-h1" min="-5" max="5" step="0.1" value="-2"><span class="val-box" id="val-h1">-2.0</span></div>
+                    <div class="input-row"><label>圆1 k</label><input type="range" id="sl-k1" min="-5" max="5" step="0.1" value="0"><span class="val-box" id="val-k1">0.0</span></div>
+                    <div class="input-row"><label>圆1 r</label><input type="range" id="sl-r1" min="0.5" max="4" step="0.1" value="2"><span class="val-box" id="val-r1">2.0</span></div>
+                    <div class="input-row" style="margin-top:8px; border-top:1px dashed #e2e8f0; padding-top:8px;"><label>圆2 h</label><input type="range" id="sl-h2" min="-5" max="5" step="0.1" value="3"><span class="val-box" id="val-h2">3.0</span></div>
+                    <div class="input-row"><label>圆2 k</label><input type="range" id="sl-k2" min="-5" max="5" step="0.1" value="1"><span class="val-box" id="val-k2">1.0</span></div>
+                    <div class="input-row"><label>圆2 r</label><input type="range" id="sl-r2" min="0.5" max="4" step="0.1" value="1.5"><span class="val-box" id="val-r2">1.5</span></div>
+                </div>
+            </div>
+
+            <!-- 公式与结论反馈区 -->
+            <div class="feedback-section">
+                <div class="card-box">
+                    <h3>📝 当前图形方程</h3>
+                    <div id="eq-display" class="eq-display">
+                        <span id="eq-line">\( y = 1.0x + 1.0 \)</span><br>
+                        <span id="eq-circle">\( (x - 0.0)^2 + (y + 2.0)^2 = 4.0 \)</span>
+                    </div>
+                </div>
+
+                <div class="card-box">
+                    <h3>🧮 位置关系判定</h3>
+                    <div id="logic-steps">
+                        <div class="step-box" id="position-result">
+                            计算圆心到直线的距离 \(d\)... 请调节滑块查看判定结果。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // === 核心配置与变量 ===
+    const canvas = document.getElementById('graphCanvas');
+    const ctx = canvas.getContext('2d');
+    let W, H;
+    let currentMode = 'line-circle';
+
+    // 坐标轴比例
+    const AXIS_RANGE = 10; // 数学坐标[-10, 10]
+    let scale = 1; // px / 单位数学坐标
+    let originX = 0, originY = 0;
+
+    // DOM 元素缓存
+    const dom = {
+        sl_k: document.getElementById('sl-k'), sl_b: document.getElementById('sl-b'),
+        sl_h: document.getElementById('sl-h'), sl_kc: document.getElementById('sl-kc'), sl_r: document.getElementById('sl-r'),
+        sl_h1: document.getElementById('sl-h1'), sl_k1: document.getElementById('sl-k1'), sl_r1: document.getElementById('sl-r1'),
+        sl_h2: document.getElementById('sl-h2'), sl_k2: document.getElementById('sl-k2'), sl_r2: document.getElementById('sl-r2'),
+        val_k: document.getElementById('val-k'), val_b: document.getElementById('val-b'),
+        val_h: document.getElementById('val-h'), val_kc: document.getElementById('val-kc'), val_r: document.getElementById('val-r'),
+        val_h1: document.getElementById('val-h1'), val_k1: document.getElementById('val-k1'), val_r1: document.getElementById('val-r1'),
+        val_h2: document.getElementById('val-h2'), val_k2: document.getElementById('val-k2'), val_r2: document.getElementById('val-r2'),
+        eq_line: document.getElementById('eq-line'), eq_circle: document.getElementById('eq-circle'),
+        pos_result: document.getElementById('position-result'),
+        param_lc: document.getElementById('param-line-circle'),
+        param_cc: document.getElementById('param-circle-circle')
+    };
+
+    // === 坐标转换函数 ===
+    function mToP(mx, my) {
+        return { px: originX + mx * scale, py: originY - my * scale };
+    }
+
+    // === 绘图引擎 ===
+    function drawAxes() {
+        ctx.clearRect(0, 0, W, H);
+        
+        // 网格
+        ctx.strokeStyle = "#e2e8f0";
+        ctx.lineWidth = 1;
+        for (let i = -AXIS_RANGE; i <= AXIS_RANGE; i++) {
+            if (i === 0) continue;
+            let p = mToP(i, 0);
+            ctx.beginPath(); ctx.moveTo(p.px, 0); ctx.lineTo(p.px, H); ctx.stroke();
+            p = mToP(0, i);
+            ctx.beginPath(); ctx.moveTo(0, p.py); ctx.lineTo(W, p.py); ctx.stroke();
+        }
+        
+        // 坐标轴
+        ctx.strokeStyle = "#1e293b";
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(0, originY); ctx.lineTo(W, originY); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(originX, 0); ctx.lineTo(originX, H); ctx.stroke();
+
+        // 刻度标签
+        ctx.fillStyle = "#475569";
+        ctx.font = "12px sans-serif";
+        ctx.textAlign = "center"; ctx.textBaseline = "top";
+        for (let i = -AXIS_RANGE; i <= AXIS_RANGE; i+=2) {
+            if (i !== 0) {
+                let p = mToP(i, 0);
+                ctx.fillText(i, p.px, originY + 4);
+                p = mToP(0, i);
+                ctx.textAlign = "right"; ctx.textBaseline = "middle";
+                ctx.fillText(i, originX - 4, p.py);
+            }
+        }
+        ctx.fillStyle = "#1e293b"; ctx.textAlign = "center"; ctx.textBaseline = "bottom";
+        ctx.fillText("O", originX - 12, originY - 4);
+    }
+
+    function drawLine(k, b, color = "#2563eb") {
+        if (!isFinite(k)) return; // 避免斜率无穷大导致崩溃
+        const x1 = -AXIS_RANGE, x2 = AXIS_RANGE;
+        const y1 = k * x1 + b, y2 = k * x2 + b;
+        const p1 = mToP(x1, y1), p2 = mToP(x2, y2);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.moveTo(p1.px, p1.py); ctx.lineTo(p2.px, p2.py); ctx.stroke();
+        // 标注直线方程
+        // 取中点
+        const midP = mToP(0, b);
+        ctx.fillStyle = color; ctx.font = "bold 14px sans-serif"; ctx.textAlign = "left"; ctx.textBaseline = "bottom";
+        let label = `y = ${parseFloat(k.toFixed(2))}x + ${parseFloat(b.toFixed(2))}`;
+        if(k===0) label = `y = ${b}`;
+        ctx.fillText(label, midP.px + 10, midP.py - 10);
+    }
+
+    function drawCircle(h, k, r, color = "#dc2626") {
+        if (r < 0.001) return;
+        const p = mToP(h, k);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.arc(p.px, p.py, r * scale, 0, Math.PI * 2); ctx.stroke();
+        // 标注圆心
+        ctx.fillStyle = color; ctx.beginPath(); ctx.arc(p.px, p.py, 5, 0, Math.PI * 2); ctx.fill();
+        // 圆心坐标标注
+        ctx.fillStyle = color; ctx.font = "bold 14px sans-serif"; ctx.textAlign = "left"; ctx.textBaseline = "bottom";
+        ctx.fillText(`O(${h.toFixed(1)},${k.toFixed(1)})`, p.px + 8, p.py - 8);
+        // 方程公式标注
+        if (h === 0 && k === 0) return; // 标准位置留给圆内
+        ctx.fillStyle = "#374151"; ctx.textAlign = "left"; ctx.textBaseline = "top";
+        let eq = `(x${h > 0 ? '-' : '+'}${Math.abs(h).toFixed(1)})^2 + (y${k > 0 ? '-' : '+'}${Math.abs(k).toFixed(1)})^2 = ${r.toFixed(1)}^2`;
+        ctx.fillText(eq, p.px + 10, p.py + 10);
+    }
+
+    // === 数学核心逻辑 ===
+    function calcLineCircle(k, b, h, kc, r) {
+        // 直线一般式: kx - y + b = 0 => A=k, B=-1, C=b
+        const A = k, B = -1, C = b;
+        // 圆心到直线距离 d = |A*h + B*kc + C| / sqrt(A^2 + B^2)
+        const numerator = Math.abs(A * h + B * kc + C);
+        const denominator = Math.sqrt(A*A + B*B);
+        const d = numerator / denominator;
+        
+        let status = "", color = "";
+        let stepText = "";
+        if (d > r + 0.001) { status = "相离 (无公共点)"; color = "tag-separate"; stepText = "圆心距 d > 半径 r，直线与圆没有交点。"; }
+        else if (Math.abs(d - r) <= 0.001) { status = "相切 (唯一公共点)"; color = "tag-tangent"; stepText = "圆心距 d = 半径 r，直线与圆只有一个交点（切点）。"; }
+        else { status = "相交 (两个公共点)"; color = "tag-intersect"; stepText = "圆心距 d < 半径 r，直线与圆产生两个交点，截得一条弦。"; }
+        
+        return { d, r, status, color, stepText };
+    }
+
+    function calcCircleCircle(h1, k1, r1, h2, k2, r2) {
+        const d = Math.sqrt((h1-h2)**2 + (k1-k2)**2);
+        const sumR = r1 + r2; const diffR = Math.abs(r1 - r2);
+        
+        let status = "", color = "", stepText = "";
+        if (d > sumR + 0.001) { status = "外离"; color = "tag-separate"; stepText = `圆心距 d > 两半径之和 (${sumR.toFixed(2)})。无公共点，内含4条公切线。`; }
+        else if (Math.abs(d - sumR) <= 0.001) { status = "外切"; color = "tag-tangent"; stepText = `圆心距 d = 两半径之和 (${sumR.toFixed(2)})。唯一公共点，3条公切线。`; }
+        else if (d > diffR + 0.001 && d < sumR - 0.001) { status = "相交"; color = "tag-intersect"; stepText = `两半径差 (${diffR.toFixed(2)}) < 圆心距 d < 两半径和 (${sumR.toFixed(2)})。两个交点，2条公切线。`; }
+        else if (Math.abs(d - diffR) <= 0.001) { status = "内切"; color = "tag-tangent"; stepText = `圆心距 d = 两半径差 (${diffR.toFixed(2)})。唯一公共点，1条公切线。`; }
+        else if (d < diffR - 0.001 && d >= 0) { status = "内含"; color = "tag-separate"; stepText = `圆心距 d < 两半径差 (${diffR.toFixed(2)})。无公共点，0条公切线。`; }
+        return { d, status, color, stepText };
+    }
+
+    // === 主渲染循环 ===
+    function render() {
+        W = canvas.clientWidth; H = canvas.clientHeight;
+        canvas.width = W; canvas.height = H;
+        // 动态缩放 (留出边距)
+        const margin = 40; // px
+        const effectiveW = W - 2 * margin;
+        const effectiveH = H - 2 * margin;
+        scale = Math.min(effectiveW / (2 * AXIS_RANGE), effectiveH / (2 * AXIS_RANGE));
+        originX = W / 2; originY = H / 2;
+
+        drawAxes();
+
+        let k, b, h, kc, r, h1, k1, r1, h2, k2, r2;
+
+        if (currentMode === 'line-circle') {
+            k = parseFloat(dom.sl_k.value);
+            b = parseFloat(dom.sl_b.value);
+            h = parseFloat(dom.sl_h.value);
+            kc = parseFloat(dom.sl_kc.value);
+            r = parseFloat(dom.sl_r.value);
+
+            // 1. 绘图
+            drawLine(k, b);
+            drawCircle(h, kc, r);
+
+            // 2. 更新公式
+            dom.eq_line.innerHTML = `\\( y = ${k.toFixed(1)}x ${b >= 0 ? '+' : '-'} ${Math.abs(b).toFixed(1)} \\)`;
+            dom.eq_circle.innerHTML = `\\( (x ${h >= 0 ? '-' : '+'} ${Math.abs(h).toFixed(1)})^2 + (y ${kc >= 0 ? '-' : '+'} ${Math.abs(kc).toFixed(1)})^2 = ${r.toFixed(1)}^2 \\)`;
+
+            // 3. 计算逻辑并反馈
+            const result = calcLineCircle(k, b, h, kc, r);
+            dom.pos_result.innerHTML = `
+                <div><strong>📐 求解过程（几何法）：</strong></div>
+                <div>直线方程：\( y = ${k.toFixed(1)}x + ${b.toFixed(1)} \)</div>
+                <div>圆心坐标：\( O(${h.toFixed(1)}, ${kc.toFixed(1)}) \)，半径 \( r = ${r.toFixed(1)} \)</div>
+                <div style="margin-top:6px;">圆心到直线的距离 \( d = \\frac{|${k.toFixed(1)} \\times ${h.toFixed(1)} - ${kc.toFixed(1)} + ${b.toFixed(1)}|}{\\sqrt{${k.toFixed(1)}^2 + (-1)^2}} = ${result.d.toFixed(3)} \)</div>
+                <div>比较 \( d \)（${result.d.toFixed(3)}）与 \( r \)（${result.r.toFixed(1)}）</div>
+                <div class="sub-step">结论：<span class="tag-result ${result.color}">${result.status}</span></div>
+                <div style="margin-top:6px;color:#475569;font-size:13px;">解析：${result.stepText}</div>
+            `;
+            renderMathInElement(dom.pos_result);
+
+        } else if (currentMode === 'circle-circle') {
+            h1 = parseFloat(dom.sl_h1.value); k1 = parseFloat(dom.sl_k1.value); r1 = parseFloat(dom.sl_r1.value);
+            h2 = parseFloat(dom.sl_h2.value); k2 = parseFloat(dom.sl_k2.value); r2 = parseFloat(dom.sl_r2.value);
+
+            // 1. 绘图
+            drawCircle(h1, k1, r1, "#2563eb"); // 蓝色圆1
+            drawCircle(h2, k2, r2, "#dc2626"); // 红色圆2
+
+            // 2. 更新公式
+            dom.eq_line.innerHTML = `圆1：\\( (x ${h1>=0?'-':'+'} ${Math.abs(h1).toFixed(1)})^2 + (y ${k1>=0?'-':'+'} ${Math.abs(k1).toFixed(1)})^2 = ${r1.toFixed(1)}^2 \\)`;
+            dom.eq_circle.innerHTML = `圆2：\\( (x ${h2>=0?'-':'+'} ${Math.abs(h2).toFixed(1)})^2 + (y ${k2>=0?'-':'+'} ${Math.abs(k2).toFixed(1)})^2 = ${r2.toFixed(1)}^2 \\)`;
+
+            // 3. 计算逻辑并反馈
+            const result = calcCircleCircle(h1, k1, r1, h2, k2, r2);
+            dom.pos_result.innerHTML = `
+                <div><strong>📐 求解过程（几何法）：</strong></div>
+                <div>圆心1：\( O_1(${h1.toFixed(1)}, ${k1.toFixed(1)}) \)，半径 \( r_1 = ${r1.toFixed(1)} \)</div>
+                <div>圆心2：\( O_2(${h2.toFixed(1)}, ${k2.toFixed(1)}) \)，半径 \( r_2 = ${r2.toFixed(1)} \)</div>
+                <div style="margin-top:6px;">两圆心距 \( d = \\sqrt{(${h1.toFixed(1)} - ${h2.toFixed(1)})^2 + (${k1.toFixed(1)} - ${k2.toFixed(1)})^2} = ${result.d.toFixed(3)} \)</div>
+                <div>比较 \( d \)（${result.d.toFixed(3)}）与 \( r_1+r_2 \)（${(r1+r2).toFixed(2)}）、\( |r_1-r_2| \)（${Math.abs(r1-r2).toFixed(2)}）</div>
+                <div class="sub-step">结论：<span class="tag-result ${result.color}">${result.status}</span></div>
+                <div style="margin-top:6px;color:#475569;font-size:13px;">解析：${result.stepText}</div>
+            `;
+            renderMathInElement(dom.pos_result);
+        }
+
+        // 更新数值显示
+        if (currentMode === 'line-circle') {
+            dom.val_k.innerText = k.toFixed(1); dom.val_b.innerText = b.toFixed(1);
+            dom.val_h.innerText = h.toFixed(1); dom.val_kc.innerText = kc.toFixed(1); dom.val_r.innerText = r.toFixed(1);
+        } else {
+            dom.val_h1.innerText = parseFloat(dom.sl_h1.value).toFixed(1); dom.val_k1.innerText = parseFloat(dom.sl_k1.value).toFixed(1); dom.val_r1.innerText = parseFloat(dom.sl_r1.value).toFixed(1);
+            dom.val_h2.innerText = parseFloat(dom.sl_h2.value).toFixed(1); dom.val_k2.innerText = parseFloat(dom.sl_k2.value).toFixed(1); dom.val_r2.innerText = parseFloat(dom.sl_r2.value).toFixed(1);
+        }
+    }
+
+    // === 模式切换 & 事件绑定 ===
+    function switchMode(mode) {
+        currentMode = mode;
+        document.querySelectorAll('.mode-btn').forEach(el => el.classList.remove('active'));
+        document.querySelector(`.mode-btn[data-mode="${mode}"]`).classList.add('active');
+        
+        if (mode === 'line-circle') {
+            dom.param_lc.classList.add('active');
+            dom.param_cc.classList.remove('active');
+            dom.eq_line.style.display = 'block';
+        } else {
+            dom.param_cc.classList.add('active');
+            dom.param_lc.classList.remove('active');
+            dom.eq_line.style.display = 'block'; // 这里显示圆1，圆2在下一行
+        }
+        render();
+    }
+
+    // 监听所有滑块变化
+    document.querySelectorAll('input[type="range"]').forEach(input => {
+        input.addEventListener('input', render);
+        input.addEventListener('change', render);
+    });
+
+    // 窗口大小自适应
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(render, 100);
+    });
+
+    // 初始化渲染
+    window.onload = () => {
+        render();
+    };
+</script>
+</body>
+</html>

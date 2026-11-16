@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>选必一 1.4 空间向量的应用 知识点</title>
+    <!-- 引入 MathJax 用于渲染数学公式 -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f6f9fc;
+            color: #1f2937;
+            padding: 20px 16px 40px;
+            line-height: 1.7;
+        }
+        .container { max-width: 600px; margin: 0 auto; }
+        
+        .header {
+            text-align: center; margin-bottom: 28px; padding-bottom: 16px;
+            border-bottom: 3px solid #3b82f6;
+        }
+        .header h1 { font-size: 22px; color: #1e3a8a; margin-bottom: 6px; }
+        .header p { font-size: 14px; color: #64748b; }
+
+        /* 卡片设计 */
+        .card {
+            background: #ffffff; border-radius: 16px; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+            margin-bottom: 20px; padding: 20px; border-top: 4px solid #3b82f6;
+        }
+        .card-title {
+            font-size: 18px; font-weight: 700; color: #1e293b;
+            margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+        }
+        .card-subtitle {
+            font-size: 15px; font-weight: 600; color: #2563eb;
+            margin-top: 16px; margin-bottom: 8px; border-left: 3px solid #2563eb; padding-left: 10px;
+        }
+
+        /* 分类颜色 */
+        .card-position { border-top-color: #2563eb; }   /* 位置关系 */
+        .card-distance { border-top-color: #16a34a; }   /* 距离 */
+        .card-angle { border-top-color: #d97706; }      /* 夹角 */
+        .card-tips { border-top-color: #dc2626; }       /* 解题步骤 */
+
+        .highlight { background: #eff6ff; padding: 12px; border-radius: 8px; margin: 10px 0; overflow-x: auto; }
+        .tag {
+            display: inline-block; font-size: 12px; font-weight: 600; color: #ffffff;
+            padding: 2px 10px; border-radius: 12px; margin-right: 6px;
+        }
+        .tag-blue { background: #2563eb; } .tag-green { background: #16a34a; }
+        .tag-orange { background: #d97706; } .tag-red { background: #dc2626; }
+
+        ul, ol { padding-left: 20px; margin: 8px 0; }
+        li { margin-bottom: 6px; }
+        p { margin: 8px 0; text-align: justify; }
+        
+        /* 公式居中 */
+        .formula-box {
+            text-align: center; padding: 8px; background: #f8fafc; border-radius: 6px; margin: 12px 0;
+        }
+
+        .divider { height: 1px; background: #e2e8f0; margin: 16px 0; }
+    </style>
+  <link rel="stylesheet" href="../../assets/css/nordic.css">
+  <link rel="stylesheet" href="../../assets/css/content.css">
+</head>
+<body>
+<div class="content-topbar">
+  <button class="nav-back" type="button" onclick="Qllq.go('../../pages/subject-home.html?grade=senior&subject=math')">← 返回科目</button>
+  <span class="crumb">高中 · 数学</span>
+</div>
+<script src="../../assets/js/app.js"></script>
+<script>if(window.Qllq&&!Qllq.isAuthed()){Qllq.go('../../index.html');}</script>
+
+<div class="container">
+    <div class="header">
+        <h1>📐 1.4 空间向量的应用</h1>
+        <p>核心思想：几何问题代数化（建系 → 写坐标 → 向量运算）</p>
+    </div>
+
+    <!-- ==================== 第一部分：位置关系 ==================== -->
+    <div class="card card-position">
+        <div class="card-title"><span class="tag tag-blue">核心基石</span> 方向向量与法向量</div>
+        <p><strong>方向向量：</strong>直线上任意两点构成的向量，或与直线平行的非零向量 \(\vec{a}\)。</p>
+        <p><strong>法向量：</strong>平面内的两个不共线向量，利用方程组 \(\vec{n} \cdot \vec{a} = 0\) 且 \(\vec{n} \cdot \vec{b} = 0\) 求得平面的法向量 \(\vec{n}\)。</p>
+        
+        <div class="card-subtitle">1. 空间中的平行关系</div>
+        <div class="highlight">
+            <ul>
+                <li><strong>线线平行：</strong> \(l_1 \parallel l_2 \iff \vec{a}_1 \parallel \vec{a}_2 \iff \vec{a}_1 = \lambda\vec{a}_2\)</li>
+                <li><strong>线面平行：</strong> \(l \parallel \alpha \iff \vec{a} \perp \vec{n} \iff \vec{a} \cdot \vec{n} = 0\) <br><span style="font-size: 13px; color: #475569;">（且直线 \(l\) 不在平面 \(\alpha\) 内，需验证）</span></li>
+                <li><strong>面面平行：</strong> \(\alpha \parallel \beta \iff \vec{n}_1 \parallel \vec{n}_2 \iff \vec{n}_1 = \lambda\vec{n}_2\)</li>
+            </ul>
+        </div>
+
+        <div class="card-subtitle">2. 空间中的垂直关系</div>
+        <div class="highlight">
+            <ul>
+                <li><strong>线线垂直：</strong> \(l_1 \perp l_2 \iff \vec{a}_1 \perp \vec{a}_2 \iff \vec{a}_1 \cdot \vec{a}_2 = 0\)</li>
+                <li><strong>线面垂直：</strong> \(l \perp \alpha \iff \vec{a} \parallel \vec{n} \iff \vec{a} = \lambda\vec{n}\)</li>
+                <li><strong>面面垂直：</strong> \(\alpha \perp \beta \iff \vec{n}_1 \perp \vec{n}_2 \iff \vec{n}_1 \cdot \vec{n}_2 = 0\)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ==================== 第二部分：距离问题 ==================== -->
+    <div class="card card-distance">
+        <div class="card-title"><span class="tag tag-green">必考公式</span> 空间中的距离</div>
+        
+        <div class="card-subtitle">1. 点到直线的距离（高中求法）</div>
+        <p>已知直线 \(l\) 过点 \(A\)，方向向量为 \(\vec{u}\)，点 \(P\) 到 \(l\) 的距离为 \(d\)，设点 \(P\) 在直线 \(l\) 上的投影为 \(H\)。</p>
+        <p><strong>步骤：</strong></p>
+        <ul>
+            <li>先求投影向量长度：\(AH = \frac{|\vec{AP} \cdot \vec{u}|}{|\vec{u}|}\)</li>
+            <li>再利用勾股定理：\(d^2 = |\vec{AP}|^2 - AH^2\) </li>
+        </ul>
+        <div class="formula-box">
+            \[
+ d = \sqrt{|\vec{AP}|^2 - \left( \frac{\vec{AP} \cdot \vec{u}}{|\vec{u}|} \right)^2} 
+\]
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="card-subtitle">2. 点到平面的距离（**高考重点**）</div>
+        <p>已知平面 \(\alpha\) 内取一点 \(A\)，平面 \(\alpha\) 的法向量为 \(\vec{n}\)，求点 \(P\) 到平面 \(\alpha\) 的距离。</p>
+        <p><strong>本质：</strong> 斜向量 \(\vec{AP}\) 在法向量 \(\vec{n}\) 上的投影长度的绝对值。</p>
+        <div class="formula-box">
+            \[
+ d = \frac{|\vec{AP} \cdot \vec{n}|}{|\vec{n}|} 
+\]
+        </div>
+        
+        <div class="divider"></div>
+
+        <div class="card-subtitle">3. 线与面、面与面的距离</div>
+        <ul>
+            <li><strong>线面距离 / 平行平面距离：</strong> 均转化为<span style="color:#16a34a; font-weight: 600;">点到平面的距离</span>直接套用公式计算。</li>
+            <li><strong>异面直线距离（选考频低）：</strong> 通常转化为点到平面的距离，或利用公垂线段（建系后找垂足坐标）求解。</li>
+        </ul>
+    </div>
+
+    <!-- ==================== 第三部分：夹角问题 ==================== -->
+    <div class="card card-angle">
+        <div class="card-title"><span class="tag tag-orange">高频考点</span> 空间中的夹角</div>
+
+        <div class="card-subtitle">1. 异面直线所成的角</div>
+        <p>范围：\(\theta \in (0, \frac{\pi}{2}]\)。<br>设直线方向向量为 \(\vec{a}, \vec{b}\)：</p>
+        <div class="formula-box">
+            \[
+ \cos\theta = |\cos\langle\vec{a}, \vec{b}\rangle| = \frac{|\vec{a} \cdot \vec{b}|}{|\vec{a}| \cdot |\vec{b}|} 
+\]
+        </div>
+        <p style="color:#b91c1c; font-size: 14px;">⚠️ <strong>注意：</strong> 夹角规定为锐角或直角，因此公式外必须加绝对值。</p>
+
+        <div class="divider"></div>
+
+        <div class="card-subtitle">2. 直线与平面所成的角</div>
+        <p>范围：\(\theta \in [0, \frac{\pi}{2}]\)。<br>设直线方向向量 \(\vec{a}\)，平面法向量 \(\vec{n}\)：</p>
+        <div class="formula-box">
+            \[
+ \sin\theta = |\cos\langle\vec{a}, \vec{n}\rangle| = \frac{|\vec{a} \cdot \vec{n}|}{|\vec{a}| \cdot |\vec{n}|} 
+\]
+        </div>
+        <p style="color:#b91c1c; font-size: 14px;">⚠️ <strong>注意：</strong> 线面角求的是 <strong>正弦值</strong>，而不是余弦值！</p>
+
+        <div class="divider"></div>
+
+        <div class="card-subtitle">3. 二面角</div>
+        <p>范围：\(\theta \in [0, \pi]\)。<br>设两个平面法向量 \(\vec{n}_1, \vec{n}_2\)：</p>
+        <div class="formula-box">
+            \[
+ \cos\langle\vec{n}_1, \vec{n}_2\rangle = \frac{\vec{n}_1 \cdot \vec{n}_2}{|\vec{n}_1| \cdot |\vec{n}_2|} 
+\]
+        </div>
+        <p><strong>二面角的余弦值需结合观察判断正负：</strong></p>
+        <ul>
+            <li>若题目指代<strong>锐二面角</strong>，则 \(\cos\theta = |\cos\langle\vec{n}_1, \vec{n}_2\rangle|\)</li>
+            <li>若为<strong>钝二面角</strong>，则 \(\cos\theta = -|\cos\langle\vec{n}_1, \vec{n}_2\rangle|\)</li>
+        </ul>
+    </div>
+
+    <!-- ==================== 第四部分：做题套路总结 ==================== -->
+    <div class="card card-tips">
+        <div class="card-title"><span class="tag tag-red">📌 通关诀窍</span> 空间向量解题步骤</div>
+        <ol style="margin-top: 8px;">
+            <li><strong>建系：</strong> 寻找三垂直交点（墙脚），建立空间直角坐标系。</li>
+            <li><strong>写坐标：</strong> 准确写出所有关键点（顶点、中点等）的坐标。</li>
+            <li><strong>求向量：</strong> 写出直线的方向向量，并利用垂直方程组求解平面的法向量。</li>
+            <li><strong>套公式：</strong> 平行看倍数，垂直看点乘为0；距离和夹角套用对应的投影、三角函数公式。</li>
+            <li><strong>下结论：</strong> 回归几何意义，注意角度的锐/钝，以及特殊符号（如线面角的正弦）。</li>
+        </ol>
+    </div>
+
+</div>
+</body>
+</html>
