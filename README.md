@@ -74,9 +74,9 @@ qllqstuding/
 
 ```bash
 git remote add origin <仓库地址>
-git push -u origin main
-# 依次推送特性分支
-git push origin ui-login ui-grade ui-subject
+git push -u origin --all   # 一次性推送 main 与全部特性分支
 ```
+
+本地分支：`ui-login`、`ui-grade`、`ui-subject`、`content-junior-math`、`content-senior-math`、`content-senior-physics`、`content-senior-geography`、`content-senior-chemistry`、`archive-source`。
 
 > 说明：本机尚未配置 GitHub 凭据（无 SSH 密钥、无已保存的 HTTPS 凭据），首次推送需提供 Personal Access Token 或配置 SSH。
