@@ -1,0 +1,10 @@
+# 自检截图与过程产物
+_shots/
+*.tmp
+
+# Office 临时锁定文件
+~$*
+
+# 系统文件
+Thumbs.db
+.DS_Store
