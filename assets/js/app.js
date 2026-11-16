@@ -50,6 +50,9 @@
       geography: [
         { file: '../content/senior/geography/geography-b2.html', title: '高一必修二 · 地理背诵要点' }
       ],
+      biology: [
+        { file: '../content/senior/biology/qualifying-exam.html', title: '生物选修班合格性考试 · 知识点全解' }
+      ],
       chemistry: [
         { file: '../content/senior/chemistry/qualifying.html', title: '化学合格考 · 学习工具' },
         { file: '../content/senior/chemistry/knowledge-2023.html', title: '2023 化学会考知识点' },
