@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录 · qllqstuding</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='8' fill='%235a7a6b'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="assets/css/nordic.css">
+</head>
+<body>
+  <main class="page-center">
+    <div class="hygge-card" style="width:100%;max-width:420px;">
+      <p class="text-label">qllqstuding</p>
+      <h1 class="text-heading" style="margin:8px 0 8px;">家教辅导系统</h1>
+      <p class="text-body" style="color:var(--color-wood);margin-bottom:40px;">请登录后选择年级与科目</p>
+
+      <form id="loginForm" novalidate>
+        <div class="element-gap" style="--element-gap:24px;">
+          <div class="field">
+            <label class="field-label" for="account">账号</label>
+            <input class="line-input" type="text" id="account" name="account" autocomplete="username" placeholder="请输入账号">
+          </div>
+          <div class="field">
+            <label class="field-label" for="password">密码</label>
+            <input class="line-input" type="password" id="password" name="password" autocomplete="current-password" placeholder="请输入密码">
+          </div>
+          <p class="error-text" id="errorText" role="alert" aria-live="polite"></p>
+          <button type="submit" class="quiet-button block" id="loginBtn">登 录</button>
+        </div>
+      </form>
+    </div>
+    <p class="footer-note" style="margin-top:40px;">少 · 慢 · 暖</p>
+  </main>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    (function () {
+      var form = document.getElementById('loginForm');
+      var accountInput = document.getElementById('account');
+      var passwordInput = document.getElementById('password');
+      var errorText = document.getElementById('errorText');
+      var loginBtn = document.getElementById('loginBtn');
+
+      // 已登录则直接进入年级选择
+      if (window.Qllq && Qllq.isAuthed()) {
+        Qllq.go('pages/grade.html');
+        return;
+      }
+
+      function showError(msg) {
+        errorText.textContent = msg;
+      }
+
+      function clearError() {
+        errorText.textContent = '';
+      }
+
+      accountInput.addEventListener('input', clearError);
+      passwordInput.addEventListener('input', clearError);
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var acc = accountInput.value.trim();
+        var pwd = passwordInput.value.trim();
+
+        if (!acc || !pwd) {
+          showError(!acc ? '请输入账号' : '请输入密码');
+          (!acc ? accountInput : passwordInput).focus();
+          return;
+        }
+
+        var ok = Qllq.login(acc, pwd);
+        if (!ok) {
+          // 固定错误文案；清空密码并聚焦
+          showError('账号密码错误，请重新输入');
+          passwordInput.value = '';
+          passwordInput.focus();
+          return;
+        }
+
+        loginBtn.textContent = '登录中…';
+        loginBtn.disabled = true;
+        // 短暂过渡后跳转年级选择
+        setTimeout(function () {
+          Qllq.go('pages/grade.html');
+        }, 300);
+      });
+    })();
+  </script>
+</body>
+</html>
